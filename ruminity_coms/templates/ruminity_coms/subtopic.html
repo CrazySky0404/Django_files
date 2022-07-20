@@ -1,0 +1,19 @@
+{% extends "ruminity_coms/base.html" %}
+
+{% block content %}
+    <p>Обрана підтема: {{ subtopic }}</p>
+
+    <p>Наявні дописи:</p>
+
+<ul>
+    {% for entry in entries %}
+        <li>
+            <p>{{ entry.date_added|date:'M d, Y H:i' }}</p>
+            <p>{{ entry.text|linebreaks }}</p>
+        </li>
+    {% empty %}
+        <li>Не додано жодного допису.</li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}
