@@ -4,7 +4,7 @@ from django.db import models
 class Topic(models.Model):
     """Тема, яку вивчає користувач."""
     text = models.CharField(max_length=300)
-    data_added = models.DateTimeField(auto_now_add=True)
+    date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         """Повернути рядкове представлення моделі."""
@@ -15,7 +15,7 @@ class Subtopic(models.Model):
     """Підтема до теми, яку вивчає користувач."""
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     text = models.CharField(max_length=300)
-    data_added = models.DateTimeField(auto_now_add=True)
+    date_added = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = 'subtopics'

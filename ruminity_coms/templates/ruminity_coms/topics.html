@@ -1,0 +1,14 @@
+{% extends "ruminity_coms/base.html" %}
+
+{% block content %}
+    <p>Форум (теми)</p>
+
+<ul>
+    {% for topic in topics %}
+        <li>{{ topic }}</li>
+    {% empty %}
+        <li>Не додано жодної теми.</li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}
