@@ -20,4 +20,6 @@ urlpatterns = [
     path('new_subtopic/<int:topic_id>/', views.new_subtopic, name='new_subtopic'),
     # Сторінка для додавання нового Допису.
     path('new_entry/<int:subtopic_id>/', views.new_entry, name='new_entry'),
+    # Сторінка для редагування допису.
+    path('edit_entry/<int:entry_id>/', views.edit_entry, name='edit_entry'),
 ]

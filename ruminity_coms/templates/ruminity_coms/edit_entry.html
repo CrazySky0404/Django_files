@@ -1,0 +1,14 @@
+{% extends "ruminity_coms/base.html" %}
+
+{% block content %}
+<p><a href="{% url 'ruminity_coms:subtopic' subtopic.id %}">{{ subtopic }}</a></p>
+
+<p>Редагувати допис:</p>
+
+<form action="{% url 'ruminity_coms:edit_entry' entry.id %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button name="submit">Зберегти зміни</button>
+</form>
+
+{% endblock content %}

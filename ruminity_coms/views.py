@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from .models import Topic, Subtopic
+from .models import Topic, Subtopic, Entry
 from .forms import TopicForm, SubtopicForm, EntryForm
 
 
@@ -78,3 +78,20 @@ def new_entry(request, subtopic_id):
 
     context = {'subtopic': subtopic, 'form': form}
     return render(request, 'ruminity_coms/new_entry.html', context)
+
+
+def edit_entry(request, entry_id):
+    """Редагування допису."""
+    entry = Entry.objects.get(id=entry_id)
+    subtopic = entry.subtopic
+
+    if request.method != 'POST':
+        form = EntryForm(instance=entry)
+    else:
+        form = EntryForm(instance=entry, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('ruminity_coms:subtopic', subtopic_id=subtopic.id)
+
+    context = {'entry': entry, 'subtopic': subtopic, 'form': form}
+    return render(request, 'ruminity_coms/edit_entry.html', context)

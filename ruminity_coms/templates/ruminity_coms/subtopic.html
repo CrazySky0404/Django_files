@@ -10,6 +10,9 @@
         <li>
             <p>{{ entry.date_added|date:'M d, Y H:i' }}</p>
             <p>{{ entry.text|linebreaks }}</p>
+            <p>
+                <a href="{% url 'ruminity_coms:edit_entry' entry.id %}">Редагувати допис</a>
+            </p>
         </li>
     {% empty %}
         <li>Не додано жодного допису.</li>
