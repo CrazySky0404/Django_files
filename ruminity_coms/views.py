@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .models import Topic, Subtopic
+from .forms import TopicForm, SubtopicForm
 
 
 def index(request):
@@ -29,3 +30,34 @@ def subtopic(request, subtopic_id):
     entries = subtopic.entry_set.order_by('-date_added')
     context = {'subtopic': subtopic, 'entries': entries}
     return render(request, 'ruminity_coms/subtopic.html', context)
+
+
+def new_topic(request):
+    """Створення нової теми."""
+    if request.method != 'POST':
+        form = TopicForm()
+    else:
+        form = TopicForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('ruminity_coms:topics')
+
+    context = {'form': form}
+    return render(request, 'ruminity_coms/new_topic.html', context)
+
+
+def new_subtopic(request, topic_id):
+    """Створення нової Підтеми."""
+    topic = Topic.objects.get(id=topic_id)
+    if request.method != 'POST':
+        form = SubtopicForm()
+    else:
+        form = SubtopicForm(data=request.POST)
+        if form.is_valid():
+            new_subtopic = form.save(commit=False)
+            new_subtopic.topic = topic
+            new_subtopic.save()
+            return redirect('ruminity_coms:subtopics', topic_id=topic_id)
+
+    context = {'topic': topic, 'form': form}
+    return render(request, 'ruminity_coms/new_subtopic.html', context)

@@ -14,4 +14,8 @@ urlpatterns = [
     path('topics/<int:topic_id>/', views.subtopics, name='subtopics'),
     # Сторінка, що відображає всі записи до вибраної підтеми.
     path('topic/<int:subtopic_id>/', views.subtopic, name='subtopic'),
+    # Сторінка для додавання нової теми.
+    path('new_topic/', views.new_topic, name='new_topic'),
+    # Сторінка для додавання нової Підтеми.
+    path('new_subtopic/<int:topic_id>/', views.new_subtopic, name='new_subtopic'),
 ]
