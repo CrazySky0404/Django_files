@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     #Мої застосунки.
     'ruminity_coms',
+    'users',
 
     #Уставні застосунки django.
     'django.contrib.admin',

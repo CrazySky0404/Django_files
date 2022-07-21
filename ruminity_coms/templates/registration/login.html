@@ -1,0 +1,16 @@
+{% extends "ruminity_coms/base.html" %}
+
+{% block content %}
+
+{% if form.errors %}
+    <p>На жаль, ви ввели невірний логін чи пароль. Будь ласка, спробуйте знову. </p>
+{% endif %}
+
+<form method="post" action="{% url 'users:login' %}" >
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button name="submit">Увійти</button>
+    <input type="hidden" name="next" value="{% url 'ruminity_coms:index' %}" />
+</form>
+
+{% endblock content %}
