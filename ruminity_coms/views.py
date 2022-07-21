@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 from .models import Topic, Subtopic
-from .forms import TopicForm, SubtopicForm
+from .forms import TopicForm, SubtopicForm, EntryForm
 
 
 def index(request):
@@ -61,3 +61,20 @@ def new_subtopic(request, topic_id):
 
     context = {'topic': topic, 'form': form}
     return render(request, 'ruminity_coms/new_subtopic.html', context)
+
+
+def new_entry(request, subtopic_id):
+    """Створення нового Допису."""
+    subtopic = Subtopic.objects.get(id=subtopic_id)
+    if request.method != 'POST':
+        form = EntryForm()
+    else:
+        form = EntryForm(data=request.POST)
+        if form.is_valid():
+            new_entry = form.save(commit=False)
+            new_entry.subtopic = subtopic
+            new_entry.save()
+            return redirect('ruminity_coms:subtopic', subtopic_id=subtopic_id)
+
+    context = {'subtopic': subtopic, 'form': form}
+    return render(request, 'ruminity_coms/new_entry.html', context)

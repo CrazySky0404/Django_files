@@ -1,9 +1,9 @@
 {% extends "ruminity_coms/base.html" %}
 
 {% block content %}
-    <p>Обрана тема: {{ topic }}</p>
+<p>Обрана тема: {{ topic }}</p>
 
-    <p>Список підтем:</p>
+<p>Список підтем:</p>
 
 <ul>
     {% for subtopic in subtopics %}
@@ -11,7 +11,7 @@
             <a href="{% url 'ruminity_coms:subtopic' subtopic.id %}">{{ subtopic }}</a>
         </li>
     {% empty %}
-        <li>Не додано жодної теми.</li>
+        <li>Не додано жодної підтеми.</li>
     {% endfor %}
 </ul>
 

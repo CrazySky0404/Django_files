@@ -18,4 +18,6 @@ urlpatterns = [
     path('new_topic/', views.new_topic, name='new_topic'),
     # Сторінка для додавання нової Підтеми.
     path('new_subtopic/<int:topic_id>/', views.new_subtopic, name='new_subtopic'),
+    # Сторінка для додавання нового Допису.
+    path('new_entry/<int:subtopic_id>/', views.new_entry, name='new_entry'),
 ]
