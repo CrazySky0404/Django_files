@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 from .models import Topic, Subtopic, Entry
 from .forms import TopicForm, SubtopicForm, EntryForm
@@ -24,6 +25,7 @@ def subtopics(request, topic_id):
     return render(request, 'ruminity_coms/topic.html', context)
 
 
+@login_required
 def subtopic(request, subtopic_id):
     """Показати вибрану підтему з усіма записами."""
     subtopic = Subtopic.objects.get(id=subtopic_id)
@@ -32,6 +34,7 @@ def subtopic(request, subtopic_id):
     return render(request, 'ruminity_coms/subtopic.html', context)
 
 
+@login_required
 def new_topic(request):
     """Створення нової теми."""
     if request.method != 'POST':
@@ -46,6 +49,7 @@ def new_topic(request):
     return render(request, 'ruminity_coms/new_topic.html', context)
 
 
+@login_required
 def new_subtopic(request, topic_id):
     """Створення нової Підтеми."""
     topic = Topic.objects.get(id=topic_id)
@@ -63,6 +67,7 @@ def new_subtopic(request, topic_id):
     return render(request, 'ruminity_coms/new_subtopic.html', context)
 
 
+@login_required
 def new_entry(request, subtopic_id):
     """Створення нового Допису."""
     subtopic = Subtopic.objects.get(id=subtopic_id)
@@ -80,6 +85,7 @@ def new_entry(request, subtopic_id):
     return render(request, 'ruminity_coms/new_entry.html', context)
 
 
+@login_required
 def edit_entry(request, entry_id):
     """Редагування допису."""
     entry = Entry.objects.get(id=entry_id)
