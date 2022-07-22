@@ -1,0 +1,13 @@
+{% extends "ruminity_coms/base.html" %}
+
+{% block content %}
+
+<p>Пам'ятайте, Ваш пароль має містити цифри, літери, зав'язку, кульмінацію та несподіваний фінал :) </p>
+<form method="post" action="{% url 'users:register' %}" >
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button name="submit">Зареєструватися</button>
+    <input type="hidden" name="next" value="{% url 'ruminity_coms:index' %}" />
+</form>
+
+{% endblock content %}

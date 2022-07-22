@@ -8,6 +8,7 @@
         Вітаю, {{ user.username }}.
         <a href="{% url 'users:logout' %}">Вихід</a>
     {% else %}
+        <a href="{% url 'users:register' %}">Реєстрація</a>
         <a href="{% url 'users:login' %}">Вхід</a>
     {% endif %}
 </p>
