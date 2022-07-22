@@ -6,6 +6,7 @@
 <p>
     {% if user.is_authenticated %}
         Вітаю, {{ user.username }}.
+        <a href="{% url 'users:logout' %}">Вихід</a>
     {% else %}
         <a href="{% url 'users:login' %}">Вхід</a>
     {% endif %}
