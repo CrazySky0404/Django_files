@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 from .models import Topic, Subtopic, Entry
 from .forms import TopicForm, SubtopicForm, EntryForm
@@ -78,6 +79,7 @@ def new_entry(request, subtopic_id):
         if form.is_valid():
             new_entry = form.save(commit=False)
             new_entry.subtopic = subtopic
+            new_entry.owner = request.user
             new_entry.save()
             return redirect('ruminity_coms:subtopic', subtopic_id=subtopic_id)
 
@@ -90,6 +92,9 @@ def edit_entry(request, entry_id):
     """Редагування допису."""
     entry = Entry.objects.get(id=entry_id)
     subtopic = entry.subtopic
+
+    if entry.owner != request.user:
+        raise Http404
 
     if request.method != 'POST':
         form = EntryForm(instance=entry)
