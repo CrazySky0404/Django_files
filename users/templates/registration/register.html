@@ -1,12 +1,24 @@
 {% extends "ruminity_coms/base.html" %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+<nav aria-label="breadcrumb" >
+  <ol class="breadcrumb" style="background-color: white;">
+    <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:index' %}">Головна</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Реєстрація</li>
+  </ol>
+</nav>
+{% endblock page_header %}
 
 {% block content %}
 
-<p>Пам'ятайте, Ваш пароль має містити цифри, літери, зав'язку, кульмінацію та несподіваний фінал :) </p>
-<form method="post" action="{% url 'users:register' %}" >
+<h2>Пам'ятайте, Ваш пароль має містити цифри, літери, зав'язку, кульмінацію та несподіваний фінал :) </h2>
+<form method="post" action="{% url 'users:register' %}" class="form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button name="submit">Зареєструватися</button>
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button name="submit" class="btn btn-primary">Зареєструватися</button>
+    {% endbuttons %}
     <input type="hidden" name="next" value="{% url 'ruminity_coms:index' %}" />
 </form>
 
