@@ -1,0 +1,51 @@
+
+.padding15 {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    padding:0 !important;
+}
+
+.btn-top {
+    padding-top: 8px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: px;
+    margin: 1px;
+    background-color: #f9b928;
+}
+
+.on-right {
+    width: 100%;
+    text-align: right;
+}
+
+.jumbotron {
+  background-image: url("images/12.jpg");
+  background-size: cover;
+  height: 100%;}
+}
+
+
+.btn-pr{
+    background-color: #fab927;
+}
+
+.btn-pr:hover{
+    background-color: #de9b04;
+    color: black;
+}
+
+.btn-pr:active{
+    background-color: white;
+    text-color: black;
+}
+
+.btn-pr:focus{
+    background-color: white;
+    border:none !important;
+    outline:none !important;
+    box-shadow: none !important;
+}
+
+
+
