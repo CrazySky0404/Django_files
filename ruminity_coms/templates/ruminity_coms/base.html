@@ -1,30 +1,31 @@
 {% load bootstrap4 %}
+{% load static %}
 
 <!DOCTYPE html>
-{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>#ruminity</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
-    <link rel='icon' href="{% static 'css/images/favicon.ico' %}" type='image/x-icon' sizes="16x16" />
+    <link rel='icon' href="{% static 'css/images/favicon.ico' %}" type='image/ico' sizes="16x16" />
     {% bootstrap_css %}
     {% bootstrap_javascript jquery='full' %}
 </head>
 <body>
 
-<div >
-  <div >
-    <div class="col col-2 p-0" style="background-color: #e2e3e4;">
+<div class="container-fluid">
+  <div class="row" style="background-color: #fff9f3;">
+    <div class="col-xs-1 col-sm-1 col-md-2 col-lg-2 p-0" style="background-color: #e2e3e4;">
     </div>
-  <div class="col p-0">
 
-<!-- Центральний контейнер старт -->
-<div class="container padding15">
-    <div class="container" style="background-color: #f9b928;">
+      <!-- Центральний контейнер старт -->
+    <div class="col p-0" >
+
+<div class="container-fluid padding15">
+    <div class="container" style="background-color: #ecebea;">
         <div class="row mr-0 ml-0">
-            <div class="col-7 d-none d-sm-block"> <div class="text-light pl-4 pb-0 pt-0 d-none d-sm-block">
+            <div class="col-7 d-none d-sm-block"> <div class="text-muted pl-4 pb-0 pt-0 d-none d-sm-block">
                 Українські письменники разом </div></div>
             <div class="col-5 on-right text-dark">
                 {% if user.is_authenticated %}
@@ -41,10 +42,10 @@
 
 <div>
     <div class="container" style="background-color: #fbcc56;">
-          <div >
+          <div>
             <div >
-                <nav class="navbar navbar-expand-md navbar-light background-color: #fbcc56;" >
-                     <div style="background-color: #fbcc56; col-2">
+                <nav class="navbar navbar-expand-md navbar-light background-color: #fbcc56; pl-0" >
+                     <div style="background-color: #fbcc56; col-1">
                         <a class="navbar-brand ml-4 pb-0 pt-0" href="{% url 'ruminity_coms:index' %}">
                          <h1 class="font-weight-bold text-dark pt-0 pb-0 mb-0">#RUMINITY</h1></a>
                      </div>
@@ -54,7 +55,7 @@
                       <span class="navbar-toggler-icon"></span>
                     </button>
 
-                    <div class="col-2 bg-primary"></div>
+                    <div class="col-1 bg-primary"></div>
                     <div class="col-7 pl-0 m-0">
 
                     <div class="collapse navbar-collapse " id="navbarSupportedContent">
@@ -64,11 +65,11 @@
                                    role="button">Форум</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link btn-pr rounded text-dark" href="#1" role="button">
+                          <a class="nav-link btn-pr rounded text-dark mr-1 ml-1 " href="#1" role="button">
                                         Твори на розгляд</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link btn-pr rounded text-dark" href="#2" role="button">
+                          <a class="nav-link btn-pr rounded text-dark mr-1" href="#2" role="button">
                                         Мої повідомлення</a>
                         </li>
                          <li class="nav-item">
@@ -89,13 +90,10 @@
 
 </div>
 <main role="main" class="container padding15">
-    <div class="pb-2 mb-2 border-bottom">
 
         {% block page_header %}
-<link href="css/style.css" rel="stylesheet">
         {% endblock page_header %}
 
-    </div>
     <div>
         {% block content %}
 
@@ -134,7 +132,7 @@
   </symbol>
 </svg>
 
-<div class="container" style="background-color: #f9b928;">
+<div class="container" style="background-color: #ecebea;">
      <ul class="nav justify-content-end border-bottom p-1">
       <li class="mr-2 ml-3 mt-1 mb-1"><a class="text-muted" href="#"><svg class="bi" width="24" height="24">
           <use xlink:href="#instagram"/></svg></a></li>
@@ -146,7 +144,7 @@
 
 {% endblock footer_content %}
     </div>
-    <div class="col col-2 " style="background-color: #e2e3e4;">
+    <div class="col-xs-1 col-sm-1 col-md-2 col-lg-2 p-0" style="background-color: #e2e3e4;">
 
     </div>
 
