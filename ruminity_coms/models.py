@@ -5,11 +5,15 @@ from django.contrib.auth.models import User
 class Topic(models.Model):
     """Тема, яку вивчає користувач."""
     text = models.CharField(max_length=300)
+    description = models.TextField(null=True)
     date_added = models.DateTimeField(auto_now_add=True)
+    #coms = models.ManyToManyField('Entry', blank=True)
+    #owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         """Повернути рядкове представлення моделі."""
         return self.text
+        #return f'{[self.text, self.description]!r}'
 
 
 class Subtopic(models.Model):
@@ -20,6 +24,7 @@ class Subtopic(models.Model):
 
     class Meta:
         verbose_name_plural = 'subtopics'
+        #ordering = ['-date_added']
 
     def __str__(self):
         """Повернути рядкове представлення моделі."""
@@ -30,12 +35,14 @@ class Entry(models.Model):
     """Конкретна інформація до підтеми."""
     subtopic = models.ForeignKey(Subtopic, on_delete=models.CASCADE)
     text = models.CharField(max_length=300)
-    description = models.TextField(null=True)
+    #description = models.TextField(null=True)
     date_added = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    #topic = models.ForeignKey(Topic, on_delete=models.CASCADE, null=True, related_name="comment")
 
     class Meta:
         verbose_name_plural = 'entries'
+        #ordering = ['-date_added']
 
     def __str__(self):
         """Повернути рядкове представлення моделі."""

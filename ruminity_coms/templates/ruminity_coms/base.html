@@ -15,7 +15,7 @@
 <body>
 
 <div class="container-fluid">
-  <div class="row" style="background-color: #fff9f3;">
+  <div class="row" style="background-color: #fdfbf6;">
     <div class="col-xs-1 col-sm-1 col-md-2 col-lg-2 p-0" style="background-color: #e2e3e4;">
     </div>
 
@@ -23,13 +23,13 @@
     <div class="col p-0" >
 
 <div class="container-fluid padding15">
-    <div class="container" style="background-color: #ecebea;">
+    <div class="container" style="background-color: #989ba2;">
         <div class="row mr-0 ml-0">
-            <div class="col-7 d-none d-sm-block"> <div class="text-muted pl-4 pb-0 pt-0 d-none d-sm-block">
+            <div class="col-6 d-none d-sm-block"> <div class="text-muted pl-4 pb-0 pt-0 d-none d-sm-block">
                 Українські письменники разом </div></div>
-            <div class="col-5 on-right text-dark">
+            <div class="col-6 on-right text-dark">
                 {% if user.is_authenticated %}
-                <span>Привіт, {{ user.username }}.</span>
+                <span>Привіт, {{ user.username }}. Нехай гарні новини зустрінуть тебе сьогодні :)</span>
                 <a href="{% url 'users:logout' %}">Вихід</a>
                 {% else %}
                 <a  href="{% url 'users:register' %}">Реєстрація</a>
@@ -43,7 +43,7 @@
 <div>
     <div class="container" style="background-color: #fbcc56;">
           <div>
-            <div >
+            <div>
                 <nav class="navbar navbar-expand-md navbar-light background-color: #fbcc56; pl-0" >
                      <div style="background-color: #fbcc56; col-1">
                         <a class="navbar-brand ml-4 pb-0 pt-0" href="{% url 'ruminity_coms:index' %}">
@@ -72,9 +72,18 @@
                           <a class="nav-link btn-pr rounded text-dark mr-1" href="#2" role="button">
                                         Мої повідомлення</a>
                         </li>
-                         <li class="nav-item">
-                          <a class="nav-link btn-pr rounded text-dark" href="#" role="button">
-                                        Дайджест</a>
+                         <li class="nav-item dropdown btn-pr rounded">
+                              <div class="dropdown">
+                                  <button class="btn btn-pr rounded dropdown-toggle" type="button" id="dropdownMenuButton"
+                                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Дайджест
+                                  </button>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item btn-pr" href="#6">Action</a>
+                                    <a class="dropdown-item btn-pr" href="#7">Another action</a>
+                                    <a class="dropdown-item btn-pr" href="#8">Something else here</a>
+                              </div>
+                        </div>
                         </li>
 
                       </ul>
@@ -132,7 +141,7 @@
   </symbol>
 </svg>
 
-<div class="container" style="background-color: #ecebea;">
+<div class="container" style="background-color: #989ba2;">
      <ul class="nav justify-content-end border-bottom p-1">
       <li class="mr-2 ml-3 mt-1 mb-1"><a class="text-muted" href="#"><svg class="bi" width="24" height="24">
           <use xlink:href="#instagram"/></svg></a></li>

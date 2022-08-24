@@ -1,18 +1,69 @@
 {% extends "ruminity_coms/base.html" %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block page_header %}
+<nav aria-label="breadcrumb" >
+  <ol class="breadcrumb" style="background-color: #fdfbf6;">
+    <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:index' %}">Головна</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Список тем</li>
+  </ol>
+</nav>
+{% endblock page_header %}
 
 {% block content %}
-    <p>Форум (теми)</p>
 
-<ul>
-    {% for topic in topics %}
-        <li>
-            <a href="{% url 'ruminity_coms:subtopics' topic.id %}">{{ topic }}</a>
-        </li>
-    {% empty %}
-        <li>Не додано жодної теми.</li>
+<div class="container">
+  <div class="row justify-content-center text-secondary text-center font-weight-bold">
+    <div class="col-4">
+      Тема
+    </div>
+    <div class="col-4">
+      Останнє повідомлення
+    </div>
+    <div class="col-2 d-none d-sm-block">
+      Підтеми
+    </div>
+    <div class="col-2 d-none d-sm-block">
+      Активність
+    </div>
+  </div>
+        {% for topic in topics %}
+<hr>
+  <div class="row justify-content-center text-center">
+
+    <div class="col-4 text-left bg-success">
+        <div class="pl-5">
+        <h5><a href="{% url 'ruminity_coms:subtopics' topic.id %}">{{ topic }}</a></h5></div>
+        <div class="font-weight-light pl-5">{{ topic.description }}</div>
+
+    </div>
+    <div class="col-4 bg-light text-center">
+        {% for k, v in last_entries %}
+            {% if topic.id == k %}
+
+            {% for k1, v1 in dict_entry_text %}
+                {% if v == k1 %}
+                    <a href="#">{{ v1 }}</a>
+                {% endif %}
+            {% endfor %}
+           {% endif %}
+        {% endfor %}
+    </div>
+    <div class="col-2 bg-success text-center d-none d-sm-block">
+        {{ topic.subtopic_set.count }}
+    </div>
+    <div class="col-2 text-center d-none d-sm-block">
+       {% for k, v in sumen %}
+            {% if topic.id == k %}
+                <img src="{% static "css/images/chat-right2.svg" %}" width="16">
+                {{ v }}
+            {% endif %}
+        {% endfor %}
+    </div>
+  </div>
     {% endfor %}
-</ul>
 
-<a href="{% url 'ruminity_coms:new_topic' %}">Додати нову тему</a>
+</div>
 
 {% endblock content %}
