@@ -1,8 +1,8 @@
-from itertools import chain
-
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
 
 from .models import Topic, Subtopic, Entry, Publication
 from .forms import TopicForm, SubtopicForm, EntryForm
@@ -86,7 +86,33 @@ def subtopics(request, topic_id):
     """Показати всі підтеми до вибраної теми."""
     topic = Topic.objects.get(id=topic_id)
     subtopics = topic.subtopic_set.order_by('-date_added')
-    context = {'topic': topic, 'subtopics': subtopics}
+
+    page = request.GET.get('page')
+    results = 3
+    paginator = Paginator(subtopics, results)
+
+    try:
+        subtopics = paginator.page(page)
+    except PageNotAnInteger:
+        page = 1
+        subtopics = paginator.page(page)
+    except EmptyPage:
+        page = paginator.num_pages
+        subtopics = paginator.page(page)
+
+    leftIndex = (int(page) - 4)
+
+    if leftIndex < 1:
+        leftIndex = 1
+
+    rightIndex = (int(page) + 5)
+
+    if rightIndex > paginator.num_pages:
+        rightIndex = paginator.num_pages + 1
+
+    custom_range = range(leftIndex, rightIndex)
+
+    context = {'topic': topic, 'subtopics': subtopics, 'paginator': paginator, 'custom_range': custom_range}
     return render(request, 'ruminity_coms/topic.html', context)
 
 
@@ -173,11 +199,36 @@ def edit_entry(request, entry_id):
     return render(request, 'ruminity_coms/edit_entry.html', context)
 
 
-@login_required
 def publications(request):
     """Показати список публікацій."""
     publications = Publication.objects.all()
-    context = {'publications': publications, }
+
+    page = request.GET.get('page')
+    results = 3
+    paginator = Paginator(publications, results)
+
+    try:
+        publications = paginator.page(page)
+    except PageNotAnInteger:
+        page = 1
+        publications = paginator.page(page)
+    except EmptyPage:
+        page = paginator.num_pages
+        publications = paginator.page(page)
+
+    leftIndex = (int(page) - 4)
+
+    if leftIndex < 1:
+        leftIndex = 1
+
+    rightIndex = (int(page) + 5)
+
+    if rightIndex > paginator.num_pages:
+        rightIndex = paginator.num_pages + 1
+
+    custom_range = range(leftIndex, rightIndex)
+
+    context = {'publications': publications, 'paginator': paginator, 'custom_range': custom_range}
     return render(request, 'ruminity_coms/publications.html', context)
 
 

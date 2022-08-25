@@ -25,4 +25,29 @@
 {% endfor %}
 
 
+{% if publications.has_other_pages %}
+<div class="d-flex justify-content-center">
+    <ul class="pagination">
+        {% if publications.has_previous %}
+         <li><a href="?page={{publications.previous_page_number}}" class="page-link">&laquo</a></li>
+        {% endif %}
+
+        {% for page in custom_range %}
+        {% if page == publications.number %}
+         <li class="page-item active" aria-current="page">
+         <a href="?page={{page}}" class="page-link">{{page}}</a>
+         </li>
+        {% else %}
+        <li><a href="?page={{page}}" class="page-link">{{page}}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if publications.has_next %}
+         <li><a href="?page={{publications.next_page_number}}" class="btn page-link">&raquo</a></li>
+        {% endif %}
+    </ul>
+</div>
+
+{% endif %}
+
 {% endblock content %}

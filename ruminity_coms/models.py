@@ -24,7 +24,7 @@ class Subtopic(models.Model):
 
     class Meta:
         verbose_name_plural = 'subtopics'
-        #ordering = ['-date_added']
+        ordering = ['-date_added']
 
     def __str__(self):
         """Повернути рядкове представлення моделі."""

@@ -19,4 +19,29 @@
     <a href="{% url 'ruminity_coms:new_subtopic' topic.id %}">Додати нову підтему</a>
 </p>
 
+{% if subtopics.has_other_pages %}
+<div class="d-flex justify-content-center">
+    <ul class="pagination">
+        {% if subtopics.has_previous %}
+         <li><a href="?page={{subtopics.previous_page_number}}" class="page-link">&laquo</a></li>
+        {% endif %}
+
+        {% for page in custom_range %}
+        {% if page == subtopics.number %}
+         <li class="page-item active" aria-current="page">
+         <a href="?page={{page}}" class="page-link">{{page}}</a>
+         </li>
+        {% else %}
+        <li><a href="?page={{page}}" class="page-link">{{page}}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if subtopics.has_next %}
+         <li><a href="?page={{subtopics.next_page_number}}" class="btn page-link">&raquo</a></li>
+        {% endif %}
+    </ul>
+</div>
+
+{% endif %}
+
 {% endblock content %}
