@@ -47,3 +47,17 @@ class Entry(models.Model):
     def __str__(self):
         """Повернути рядкове представлення моделі."""
         return self.text
+
+
+class Publication(models.Model):
+    """Публікація власного твору користувача."""
+    text = models.CharField(max_length=300)
+    description = models.TextField(max_length=10000, null=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date_added']
+
+    def __str__(self):
+        """Повернути рядкове представлення моделі."""
+        return self.text

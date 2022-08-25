@@ -1,0 +1,28 @@
+{% extends "ruminity_coms/base.html" %}
+
+
+{% block page_header %}
+<nav aria-label="breadcrumb" >
+  <ol class="breadcrumb" style="background-color: white;">
+    <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:index' %}">Головна</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Твори на розгляд</li>
+  </ol>
+</nav>
+{% endblock page_header %}
+
+{% block content %}
+
+{% for publication in publications %}
+<div class="card mb-3">
+    <h5 class="card-header">
+        <a href="{% url 'ruminity_coms:publication' publication.id %}">{{ publication.text }}</a>
+        <small>- {{ publication.date_added|date:'M d, Y H:i' }}</small>
+     </h5>
+
+</div>
+{% empty %}
+    <p>Не додано жодного допису.</p>
+{% endfor %}
+
+
+{% endblock content %}

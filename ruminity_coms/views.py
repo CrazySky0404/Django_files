@@ -4,7 +4,7 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from .models import Topic, Subtopic, Entry
+from .models import Topic, Subtopic, Entry, Publication
 from .forms import TopicForm, SubtopicForm, EntryForm
 
 
@@ -171,6 +171,22 @@ def edit_entry(request, entry_id):
 
     context = {'entry': entry, 'subtopic': subtopic, 'form': form}
     return render(request, 'ruminity_coms/edit_entry.html', context)
+
+
+@login_required
+def publications(request):
+    """Показати список публікацій."""
+    publications = Publication.objects.all()
+    context = {'publications': publications, }
+    return render(request, 'ruminity_coms/publications.html', context)
+
+
+@login_required
+def publication(request, publication_id):
+    """Показати вибрану публікацію."""
+    publication = Publication.objects.get(id=publication_id)
+    context = {'publication': publication, }
+    return render(request, 'ruminity_coms/publication.html', context)
 
 
 

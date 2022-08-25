@@ -22,4 +22,8 @@ urlpatterns = [
     path('new_entry/<int:subtopic_id>/', views.new_entry, name='new_entry'),
     # Сторінка для редагування допису.
     path('edit_entry/<int:entry_id>/', views.edit_entry, name='edit_entry'),
+    # Сторінка, що відображає всі твори на розгляд.
+    path('publications/', views.publications, name='publications'),
+    # Сторінка для публікації твору на розгляд.
+    path('publication/<int:publication_id>/', views.publication, name='publication'),
 ]
