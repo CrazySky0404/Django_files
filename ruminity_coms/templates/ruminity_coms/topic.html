@@ -1,23 +1,35 @@
 {% extends "ruminity_coms/base.html" %}
 
+{% block page_header %}
+<nav aria-label="breadcrumb" >
+  <ol class="breadcrumb card-header" style="background-color: white;">
+    <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:index' %}">Головна</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:topics' %}">Форум</a></li></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ topic }}</li>
+  </ol>
+</nav>
+{% endblock page_header %}
+
 {% block content %}
-<p>Обрана тема: {{ topic }}</p>
 
-<p>Список підтем:</p>
+<div class="card mb-3">
+    <h5 class="card-header">
+        Тема "{{topic}}" &nbsp;
+        <a class="btn btn-primary" href="{% url 'ruminity_coms:new_subtopic' topic.id %}"" role="button">Додати підтему</a>
+    </h5>
+</div>
 
-<ul>
-    {% for subtopic in subtopics %}
-        <li>
-            <a href="{% url 'ruminity_coms:subtopic' subtopic.id %}">{{ subtopic }}</a>
-        </li>
-    {% empty %}
-        <li>Не додано жодної підтеми.</li>
-    {% endfor %}
-</ul>
-
-<p>
-    <a href="{% url 'ruminity_coms:new_subtopic' topic.id %}">Додати нову підтему</a>
-</p>
+{% for subtopic in subtopics %}
+<div class="card mb-3">
+    <h4 class="card-header">
+        <a href="{% url 'ruminity_coms:subtopic' subtopic.id %}">{{ subtopic }}</a><br>
+    </h4>
+        <div class="card-body">{{ subtopic.description }}
+        </div>
+</div>
+{% empty %}
+    <p>Не додано жодної підтеми.</p>
+{% endfor %}
 
 {% if subtopics.has_other_pages %}
 <div class="d-flex justify-content-center">

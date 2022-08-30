@@ -1,0 +1,39 @@
+{% extends "ruminity_coms/base.html" %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+<nav aria-label="breadcrumb" >
+  <ol class="breadcrumb card-header">
+    <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:index' %}">Головна</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:publications' %}">Твори на розгляд</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Додати свій твір</li>
+  </ol>
+</nav>
+
+{% endblock page_header %}
+
+{% block content %}
+<h4 class="text-center">Додати свій твір на розгляд</h4><br>
+<div class="container">
+  <div class="row align-items-center">
+    <div class="col-1">
+    </div>
+    <div class="col-10">
+
+        <form action="{% url 'ruminity_coms:new_publication' %}" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <p class="left">Кількість символів: ???? </p>
+            {% buttons %}
+            <button name="submit" class="btn btn-primary">Додати свій твір на розгляд</button>
+            {% endbuttons %}
+            <input type="hidden" name="next" value="{% url 'ruminity_coms:publications' %}">
+        </form>
+    </div>
+    <div class="col-1">
+    </div>
+  </div>
+    <br>
+</div>
+
+{% endblock content %}

@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 from .models import Topic, Subtopic, Entry, Publication
-from .forms import TopicForm, SubtopicForm, EntryForm
+from .forms import TopicForm, SubtopicForm, EntryForm, PublicationForm
 
 
 def index(request):
@@ -199,6 +199,7 @@ def edit_entry(request, entry_id):
     return render(request, 'ruminity_coms/edit_entry.html', context)
 
 
+@login_required
 def publications(request):
     """Показати список публікацій."""
     publications = Publication.objects.all()
@@ -238,6 +239,44 @@ def publication(request, publication_id):
     publication = Publication.objects.get(id=publication_id)
     context = {'publication': publication, }
     return render(request, 'ruminity_coms/publication.html', context)
+
+
+@login_required
+def new_publication(request):
+    """Створення нової публікацію."""
+    if request.method != 'POST':
+        form = PublicationForm()
+    else:
+        form = PublicationForm(data=request.POST)
+        if form.is_valid():
+            new_publication = form.save(commit=False)
+            new_publication.owner = request.user
+            new_publication.save()
+            #form.save()
+            return redirect('ruminity_coms:publications')
+
+    context = {'form': form}
+    return render(request, 'ruminity_coms/new_publication.html', context)
+
+
+@login_required
+def edit_publication(request, publication_id):
+    """Редагування допису."""
+    publication = Publication.objects.get(id=publication_id)
+
+    if publication.owner != request.user:
+        raise Http404
+
+    if request.method != 'POST':
+        form = PublicationForm(instance=publication)
+    else:
+        form = PublicationForm(instance=publication, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('ruminity_coms:publication', publication_id=publication.id)
+
+    context = {'publication': publication, 'form': form}
+    return render(request, 'ruminity_coms/edit_publication.html', context)
 
 
 

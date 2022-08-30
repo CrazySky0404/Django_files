@@ -1,26 +1,69 @@
 {% extends "ruminity_coms/base.html" %}
 
+{% block page_header %}
+<nav aria-label="breadcrumb" >
+  <ol class="breadcrumb card-header">
+    <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:index' %}">Головна</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:topics' %}">Форум</a></li></li>
+    <li class="breadcrumb-item" ><a href="{%url 'ruminity_coms:subtopics' subtopic.topic.id %}">{{ subtopic.topic }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ subtopic }}</li>
+  </ol>
+</nav>
+{% endblock page_header %}
+
 {% block content %}
-    <p>Обрана підтема: {{ subtopic }}</p>
 
-    <p>Наявні дописи:</p>
-
-<ul>
-    {% for entry in entries %}
-        <li>
-            <p>{{ entry.date_added|date:'M d, Y H:i' }}</p>
-            <p>{{ entry.text|linebreaks }}</p>
-            <p>
-                <a href="{% url 'ruminity_coms:edit_entry' entry.id %}">Редагувати допис</a>
-            </p>
-        </li>
-    {% empty %}
-        <li>Не додано жодного допису.</li>
-    {% endfor %}
-</ul>
+<div class="card mb-3">
+    <h5 class="card-header">
+        Підтема "{{subtopic}}" &nbsp;
+    </h5>
+    <p class="card-body">{{ subtopic.description }}</p>
+</div>
+<a class="btn btn-primary" href="{% url 'ruminity_coms:new_entry' subtopic.id %}" role="button">Додати коментар</a>
+<br><br>
+{% for entry in entries %}
+<div class="card mb-3">
+    <h4 class="card-header">
+        {{ entry.date_added|date:'M d, Y H:i' }}
+        <small><a href="{% url 'ruminity_coms:edit_entry' entry.id %}">Редагувати допис</a></small>
+    </h4>
+    <div class="card-body">
+        {{ entry.text|linebreaks }}
+    </div>
+</div>
+{% empty %}
+    <p>Не додано жодного допису.</p>
+{% endfor %}
 
 <p>
     <a href="{% url 'ruminity_coms:new_entry' subtopic.id %}">Додати новий допис</a>
 </p>
+
+
+{% if entries.has_other_pages %}
+<div class="d-flex justify-content-center">
+    <ul class="pagination">
+        {% if entries.has_previous %}
+         <li><a href="?page={{entries.previous_page_number}}" class="page-link">&laquo</a></li>
+        {% endif %}
+
+        {% for page in custom_range %}
+        {% if page == entries.number %}
+         <li class="page-item active" aria-current="page">
+         <a href="?page={{page}}" class="page-link">{{page}}</a>
+         </li>
+        {% else %}
+        <li><a href="?page={{page}}" class="page-link">{{page}}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if entries.has_next %}
+         <li><a href="?page={{entries.next_page_number}}" class="btn page-link">&raquo</a></li>
+        {% endif %}
+    </ul>
+</div>
+
+{% endif %}
+
 
 {% endblock content %}

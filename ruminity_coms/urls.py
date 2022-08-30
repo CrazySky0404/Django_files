@@ -26,4 +26,6 @@ urlpatterns = [
     path('publications/', views.publications, name='publications'),
     # Сторінка для публікації твору на розгляд.
     path('publication/<int:publication_id>/', views.publication, name='publication'),
+    # Сторінка для додавання нового твору на розгляд.
+    path('new_publication/', views.new_publication, name='new_publication'),
 ]

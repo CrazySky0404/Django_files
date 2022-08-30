@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Topic, Subtopic, Entry
+from .models import Topic, Subtopic, Entry, Publication
 
 
 class TopicForm(forms.ModelForm):
@@ -23,3 +23,11 @@ class EntryForm(forms.ModelForm):
         fields = ['text']
         labels = {'text': ''}
         widgets = {'text': forms.Textarea(attrs={'cols': 80})}
+
+
+class PublicationForm(forms.ModelForm):
+    class Meta:
+        model = Publication
+        fields = ['text', 'description']
+        labels = {'text':'Назва твору', 'description':'Текст твору'}
+        widgets = {'description': forms.Textarea(attrs={'rows': 15, 'cols': 10}),}
