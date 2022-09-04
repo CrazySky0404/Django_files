@@ -75,8 +75,7 @@ def topics(request):
             sum_entries += entries
             sumen1 = {topic.id: sum_entries}
         sumen.update(sumen1)
-    #for k,value in sumen.items():
-        #print(k,value)
+
     context = {'topics': topics, 'sumen': sumen.items(), 'last_entries': last_entries.items(),
                'dict_entry_text': dict_entry_text, 'list_last': list_last}
     return render(request, 'ruminity_coms/topics.html', context)
