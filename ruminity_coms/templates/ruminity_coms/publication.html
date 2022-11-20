@@ -1,5 +1,5 @@
 {% extends "ruminity_coms/base.html" %}
-
+{% load static %}
 
 {% block page_header %}
 <nav aria-label="breadcrumb" >
@@ -19,7 +19,8 @@
     <div class="col">
     </div>
     <div class="col-9">
-                      <h2>
+        <center><img src="{% static "css/images/icon-public.jpg" %}" width='40' class="pb-4 pt-5"></center>
+                 <h2>
                     <center>{{ publication.text }}</center>
                  </h2>
                     <center>

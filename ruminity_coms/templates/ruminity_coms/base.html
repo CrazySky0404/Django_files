@@ -30,7 +30,6 @@
                     <div class="col-8 on-right text-muted p-0">
                             {% if user.is_authenticated %}
                             Привіт, {{ user.username }}. Нехай гарні новини зустрінуть тебе сьогодні :) &nbsp;
-                            <a href="{% url 'users:logout' %}">Вихід</a>
                             {% else %}
                             <a  href="{% url 'users:register' %}">Реєстрація</a>
                             <a href="{% url 'users:login' %}">Вхід</a>
@@ -87,7 +86,24 @@
 
                 <div class="ml-auto p-2 text-muted">
                         {% if user.is_authenticated %}
-                        Привіт, {{ user.username }}
+                        <div class="dropdown show">
+                              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <img src="{% static "css/images/icon-public.jpg" %}" width="20">
+                              </a>
+
+                              <div class="dropdown-menu dropdown-menu-right" style="width: 250px" aria-labelledby="dropdownMenuLink">
+                                <center><img src="{% static "css/images/icon-public.jpg" %}" width="40" class="pt-4 pb-2"></center>
+                                <center><p class="m-0">{{ user.username }}</p>
+                                        <p class="pb-2 text-muted"> gogi@nsm.com</p></center>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#16"><img src="{% static "css/images/icon-public.jpg" %}" width="20" class="pr-1">Профіль</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="17#">Сповіщення</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'users:logout' %}">Вихід</a>
+                              </div>
+                        </div>
+
                         {% else %}
                         <a  href="{% url 'users:register' %}">Реєстрація</a>
                         <a href="{% url 'users:login' %}">Вхід</a>
