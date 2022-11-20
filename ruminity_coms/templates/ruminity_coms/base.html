@@ -42,65 +42,70 @@
     <!--Українські письменники разом finish -->
 
     <!--Menu start -->
-    <div class="row" style="background-color: #413976;">
-        <div class="container -fluid">
-                <nav class="navbar navbar-expand-md navbar-light background-color: #fbcc56; pl-0" >
-                <div style="background-color: #413976; col-1">
+    <div class="row" style="background-color: #413976; d-flex">
+        <div class="container-fluid">
+                <nav class="navbar navbar-expand background-color: #fbcc56; p-0" >
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div style="background-color: #413976 p-2">
                         <a class="navbar-brand ml-4 pb-10 pt-10" href="{% url 'ruminity_coms:index' %}">
                          <h1 class="font-weight-bold text-light pt-0 pb-0 mb-0">#UMINITY</h1></a>
                 </div>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse"
-                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                      <span class="navbar-toggler-icon"></span>
-                    </button>
 
-                <div class="col-1 bg-primary"></div>
-                <div class="col-7 pl-0 m-0">
-
-                    <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                <div class="navbar navbar-dark" style="background-color: #413976" id="navbarSupportedContent p-2">
                       <ul class="navbar-nav ml-auto mb-0 ">
                         <li class="nav-item">
-                          <a class="nav-link btn-pr rounded text-light" href="{% url 'ruminity_coms:topics' %}"
+                          <a class="nav-link rounded" href="{% url 'ruminity_coms:topics' %}"
                                    role="button">Форум</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link btn-pr rounded text-light mr-1 ml-1 " href="{% url 'ruminity_coms:publications' %}"
+                          <a class="nav-link rounded mr-1 ml-1 " href="{% url 'ruminity_coms:publications' %}"
                              role="button">
                                         Твори на розгляд</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link btn-pr rounded text-light mr-1" href="#2" role="button">
+                          <a class="nav-link rounded mr-1" href="#2" role="button">
                                         Мої повідомлення</a>
                         </li>
-                         <li class="nav-item dropdown btn-pr rounded">
-                              <div class="dropdown">
-                                  <button class="btn btn-pr rounded dropdown-toggle text-light" type="button" id="dropdownMenuButton"
+                         <li class="nav-item dropdown">
+                         <div class="dropdown">
+                              <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton"
                                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Дайджест
-                                  </button>
+                              </a>
                               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item btn-pr" href="#6">Action</a>
-                                    <a class="dropdown-item btn-pr" href="#7">Another action</a>
-                                    <a class="dropdown-item btn-pr" href="#8">Something else here</a>
+                                    <a class="dropdown-item text-primary" href="#6">Action</a>
+                                    <a class="dropdown-item text-primary" href="#7">Another action</a>
+                                    <a class="dropdown-item text-primary" href="#8">Something else here</a>
                               </div>
                         </div>
                         </li>
 
                       </ul>
-                    </div>
                 </div>
-                   </nav>
+
+                <div class="ml-auto p-2 text-muted">
+                        {% if user.is_authenticated %}
+                        Привіт, {{ user.username }}
+                        {% else %}
+                        <a  href="{% url 'users:register' %}">Реєстрація</a>
+                        <a href="{% url 'users:login' %}">Вхід</a>
+                        {% endif %}
+                </div>
+                </nav>
+        </div>
+
     </div>
-</div>
      <!--Menu finish -->
 
         {% block page_header %}
         {% endblock page_header %}
-
-
+        {% block content %}
+        {% endblock content %}
+    <div class="container-fluid mt-5"></div>
     <!--Footer start -->
-    <div class="row" style="background-color: #413976;">
+    <div class="row" style="background-color: #f0f0f0;">
         <div class="container-fluid">
             <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top">
             <p class="col-md-5 mb-0 text-secondary">&copy; #Ruminity, 2022–2023. Зроблено в Україні.</p>
@@ -123,7 +128,7 @@
         </svg>
 
 
-        <div class="container-fluid" style="background-color: #3b3268;">
+        <div class="container-fluid" style="background-color: #f6f6f6;">
              <ul class="nav justify-content-end border-bottom p-1">
               <li class="mr-2 ml-3 mt-1 mb-1"><a class="text-muted" href="#"><svg class="bi" width="24" height="24">
                   <use xlink:href="#instagram"/></svg></a></li>

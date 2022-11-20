@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -52,7 +53,7 @@ class Entry(models.Model):
 class Publication(models.Model):
     """Публікація власного твору користувача."""
     text = models.CharField(max_length=300)
-    description = models.TextField(max_length=10000, null=True)
+    description = models.TextField(null=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
     class Meta:

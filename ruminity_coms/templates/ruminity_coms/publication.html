@@ -13,14 +13,27 @@
 
 {% block content %}
 
-<div class="card mb-3">
-    <h5 class="card-header">
-        {{ publication.text }} <small>- {{ publication.date_added|date:'M d, Y H:i' }}</small>
-     </h5>
-     <div class="card-body">
-     {{ publication.description }}
-     </div>
 
+<div class="container">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col-9">
+                      <h2>
+                    <center>{{ publication.text }}</center>
+                 </h2>
+                    <center>
+                        <span class="text-secondary font-italic">Опубліковано:</span>
+                         <span class="text-primary font-italic">{{ publication.date_added|date:'M d, Y H:i' }}</span>
+                    </center>
+                 <div>
+                     <hr>
+                     <h4 class="text-muted font-family-sans-serif:'Segoe UI'"><small>{{ publication.description }}</small></h4>
+                 </div>
+                </div>
+    <div class="col">
+    </div>
+  </div>
 </div>
 
 

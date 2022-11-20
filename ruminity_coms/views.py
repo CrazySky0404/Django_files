@@ -251,11 +251,15 @@ def new_publication(request):
         if form.is_valid():
             new_publication = form.save(commit=False)
             new_publication.owner = request.user
+            print("TEXT: " + form.cleaned_data["text"])
+            print("DESCRIPTION: " + form.cleaned_data["description"])
             new_publication.save()
             #form.save()
             return redirect('ruminity_coms:publications')
+    text = "10"
+    count_symbol = len(text)
 
-    context = {'form': form}
+    context = {'form': form, 'count_symbol': count_symbol}
     return render(request, 'ruminity_coms/new_publication.html', context)
 
 

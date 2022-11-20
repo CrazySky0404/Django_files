@@ -1,9 +1,4 @@
 
-.padding15 {
-    padding-right: 0 !important;
-    padding-left: 0 !important;
-    padding:0 !important;
-}
 
 .btn-top {
     padding-top: 8px;
@@ -26,26 +21,14 @@
 }
 
 
-.btn-pr{
-    background-color: #fab927;
+.text-primary {
+  color: #0d6efd !important;
 }
 
 .btn-pr:hover{
-    background-color: #de9b04;
-    color: black;
-}
+    background-color: red!important;
+    color: red!important;
 
-.btn-pr:active{
-    background-color: white;
-    text-color: black;
-}
-
-.btn-pr:focus{
-    background-color: white;
-    border:none !important;
-    outline:none !important;
-    box-shadow: none !important;
-}
 
 
 
