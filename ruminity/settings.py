@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     # Сторонні застосунки.
     'bootstrap4',
+    'mptt',
 
     #Уставні застосунки django.
     'django.contrib.admin',
@@ -86,7 +87,7 @@ WSGI_APPLICATION = 'ruminity.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        #'ENGINE': 'django.db.backends.sqlite3',
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ruminity',
         'USER': 'admin',

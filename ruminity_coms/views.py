@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
-from .models import Topic, Subtopic, Entry, Publication
+from .models import Topic, Subtopic, Entry, Publication, Comment
 from .forms import TopicForm, SubtopicForm, EntryForm, PublicationForm
 
 
@@ -237,7 +237,9 @@ def publications(request):
 def publication(request, publication_id):
     """Показати вибрану публікацію."""
     publication = Publication.objects.get(id=publication_id)
-    context = {'publication': publication, }
+    comments = Comment.objects.all()
+    #comments = publication.comments.order_by('-date_added')
+    context = {'publication': publication, 'comments': comments}
     return render(request, 'ruminity_coms/publication.html', context)
 
 
@@ -282,5 +284,12 @@ def edit_publication(request, publication_id):
     context = {'publication': publication, 'form': form}
     return render(request, 'ruminity_coms/edit_publication.html', context)
 
+
+# @login_required
+# def publication(request, publication_id):
+#     """Показати вибрану публікацію."""
+#     publication = Publication.objects.get(id=publication_id)
+#     context = {'publication': publication, }
+#     return render(request, 'ruminity_coms/publication.html', context)
 
 

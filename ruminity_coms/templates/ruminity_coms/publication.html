@@ -29,9 +29,34 @@
                     </center>
                  <div>
                      <hr>
-                     <h4 class="text-muted font-family-sans-serif:'Segoe UI'"><small>{{ publication.description }}</small></h4>
+                     <h4 class="text-muted pb-3"><small>{{ publication.description }}</small></h4>
+                     <hr>
                  </div>
+        <div class="pb-4">
+            <h5 class="pt-2">Які враження?</h5><br>
+            <button name="submit" class="btn btn-success">20 - Сподобалося
+                <img src="{% static "css/images/smile-icon.png" %}" width='25'>
+            </button>
+            <button name="submit" class="btn btn-secondary">5 - Спробуй ще
+                <img src="{% static "css/images/mood-icon.png" %}" width='25'>
+            </button>
+        </div>
+        {% load mptt_tags %}
+        <div>
+            {%  recursetree comments %}
+            <div>{{ node.text }}</div>
+            {% if not node.is_leaf_node %}
+                <div class="children pl-2 pl-md-5">
+                    {{ children }}
                 </div>
+            {% endif %}
+            {% endrecursetree %}
+        </div>
+
+        <div>
+        </div>
+
+    </div>
     <div class="col">
     </div>
   </div>
