@@ -1,11 +1,11 @@
-from django.http import Http404
-from django.shortcuts import render, redirect
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 from .models import Topic, Subtopic, Entry, Publication, Comment
-from .forms import TopicForm, SubtopicForm, EntryForm, PublicationForm
+from .forms import TopicForm, SubtopicForm, EntryForm, PublicationForm, NewCommentForm
 
 
 def index(request):
@@ -236,10 +236,24 @@ def publications(request):
 @login_required
 def publication(request, publication_id):
     """Показати вибрану публікацію."""
-    publication = Publication.objects.get(id=publication_id)
-    comments = Comment.objects.all()
-    #comments = publication.comments.order_by('-date_added')
-    context = {'publication': publication, 'comments': comments}
+    #publication = Publication.objects.get(id=publication_id)
+    publication = get_object_or_404(Publication, id=publication_id)
+    comments = publication.comments.all()
+
+    new_comment = None
+
+    if request.method == 'POST':
+        form = NewCommentForm(request.POST)
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.publication = publication
+            new_comment.save()
+            #return HttpResponseRedirect(publication.id)
+            return HttpResponseRedirect('/publication/' + f'{publication_id}')
+    else:
+        form = NewCommentForm()
+
+    context = {'publication': publication, 'comments': comments, 'form': form, 'new_comment': new_comment}
     return render(request, 'ruminity_coms/publication.html', context)
 
 
@@ -285,11 +299,5 @@ def edit_publication(request, publication_id):
     return render(request, 'ruminity_coms/edit_publication.html', context)
 
 
-# @login_required
-# def publication(request, publication_id):
-#     """Показати вибрану публікацію."""
-#     publication = Publication.objects.get(id=publication_id)
-#     context = {'publication': publication, }
-#     return render(request, 'ruminity_coms/publication.html', context)
 
 

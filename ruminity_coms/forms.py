@@ -1,10 +1,7 @@
-import value as value
 from django import forms
-from django.core import validators
-from django.core.exceptions import ValidationError
-from django.core.validators import MinValueValidator, MaxLengthValidator
 
-from .models import Topic, Subtopic, Entry, Publication
+from .models import Topic, Subtopic, Entry, Publication, Comment
+from mptt.forms import TreeNodeChoiceField
 
 
 class TopicForm(forms.ModelForm):
@@ -48,3 +45,21 @@ class PublicationForm(forms.ModelForm):
         return self.cleaned_data
 
 
+class NewCommentForm(forms.ModelForm):
+    parent = TreeNodeChoiceField(queryset=Comment.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['parent'].widget.attrs.update(
+            {'class': 'd-none'})
+        self.fields['parent'].label = ''
+        self.fields['parent'].required = False
+
+    class Meta:
+        model = Comment
+        fields = ('name', 'parent', 'text')
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'col-sm-12'}),
+            'text': forms.Textarea(attrs={'class': 'form-control'})
+        }

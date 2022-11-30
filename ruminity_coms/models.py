@@ -1,3 +1,5 @@
+from audioop import reverse
+
 from django.db import models
 from django.contrib.auth.models import User
 from mptt.models import MPTTModel, TreeForeignKey
@@ -51,6 +53,7 @@ class Entry(models.Model):
 
 class Publication(models.Model):
     """Публікація власного твору користувача."""
+
     text = models.CharField(max_length=300)
     description = models.TextField(null=True)
     date_added = models.DateTimeField(auto_now_add=True)
@@ -79,4 +82,4 @@ class Comment(MPTTModel):
 
     def __str__(self):
         """Повернути рядкове представлення моделі."""
-        return self.text
+        return self.name

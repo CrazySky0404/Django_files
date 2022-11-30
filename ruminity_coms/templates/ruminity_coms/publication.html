@@ -44,7 +44,12 @@
         {% load mptt_tags %}
         <div>
             {%  recursetree comments %}
-            <div>{{ node.text }}</div>
+            <div id="{{ node.id }}" class="my-2 p-2" style="border: 1px solid grey">
+            <p class="pt-2 d-flex justify-content-between">{{ node.name }} у {{ node.date_added }}</p>
+            <div> {{ node.text }} </div>
+            <hr />
+            <button class="button" onclick="myFunction({{ node.id }})">Reply</button>
+            </div>
             {% if not node.is_leaf_node %}
                 <div class="children pl-2 pl-md-5">
                     {{ children }}
@@ -52,6 +57,15 @@
             {% endif %}
             {% endrecursetree %}
         </div>
+
+        <div>
+        <form id="myForm" method="post">
+          <h2>Create new comment</h2>
+          {{ form.as_p }}
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+        </form>
+      </div>
 
         <div>
         </div>
@@ -62,5 +76,38 @@
   </div>
 </div>
 
+<script>
+  function formExit() {
+    document.getElementById("Form").remove();
+  }
+
+    function myFunction(id) {
+
+     if (document.contains(document.getElementById("Form"))) {
+      document.getElementById("Form").remove();
+    }
+
+    var a = document.getElementById(id);
+    a.insertAdjacentHTML('afterend',
+
+     '<form id="Form" class="form-insert py-2" method="post"> \
+            <div class="d-flex justify-content-between"><h2>Reply:</h2><div><button type="button" class="btn btn-outline-secondary" onclick="formExit()"">Close</button></div></div> \
+            <label for="id_name">Name:</label> \
+            <input type="text" name="name" class="col-sm-12" maxlength="50" required="" id="id_name">\
+            <select name="parent" class="d-none" id="id_parentt"> \
+            <option value="' + id + '" selected="' + id + '"></option> \
+            </select> \
+            <label for="id_content">Content:</label> \
+            <textarea name="text" cols="40" rows="5" class="form-control" required id="id_content"></textarea> \
+            {% csrf_token %} \
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button> \
+          </form>');
+
+    //document.querySelector('#id_parentt [value="' + id + '"]').selected = true;
+    }
+
+
+    $('#myForm').trigger("reset");
+</script>
 
 {% endblock content %}
