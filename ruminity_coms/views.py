@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
-from .models import Topic, Subtopic, Entry, Publication, Comment
-from .forms import TopicForm, SubtopicForm, EntryForm, PublicationForm, NewCommentForm
+from .models import Topic, Subtopic, Publication, Competition
+from .forms import TopicForm, SubtopicForm, PublicationForm, NewCommentForm, CommentFormForum
 
 
 def index(request):
@@ -29,57 +29,56 @@ def topics(request):
         list_entry_id_2 = []
         dict_topic_text1 = {topic.id: topic.text}
 
-        for subtopic in subtopics:
-            entries = Entry.objects.filter(subtopic__text=subtopic).order_by('-id')[:1]
-            if not entries:
-                pass
-            else:
-                list_entry.append(entries)
-                for entry in Entry.objects.filter(subtopic__text=subtopic).order_by('-id'):
-                    list_entry_id_2.append(entry.id)
-                    dict_entry_text2 = {entry.id: entry.text}
-                    dict_entry_text.update(dict_entry_text2)
-
-            for entry in Entry.objects.filter(subtopic__text=subtopic).order_by('-id'):
-                entry1 = entry.text
-                entry2 = entry.id
-                entry3.append(entry2)
-                entry4.append(entry1)
-        dict_topic_text.update(dict_topic_text1)
+        # for subtopic in subtopics:
+        #     entries = Entry.objects.filter(subtopic__text=subtopic).order_by('-id')[:1]
+        #     if not entries:
+        #         pass
+        #     else:
+        #         list_entry.append(entries)
+        #         for entry in Entry.objects.filter(subtopic__text=subtopic).order_by('-id'):
+        #             list_entry_id_2.append(entry.id)
+        #             dict_entry_text2 = {entry.id: entry.text}
+        #             dict_entry_text.update(dict_entry_text2)
+        #
+        #     for entry in Entry.objects.filter(subtopic__text=subtopic).order_by('-id'):
+        #         entry1 = entry.text
+        #         entry2 = entry.id
+        #         entry3.append(entry2)
+        #         entry4.append(entry1)
+        # dict_topic_text.update(dict_topic_text1)
 
         list_y = sorted(list_entry_id_2)
         for x in list_y:
              last_entries1 = {topic.id: x}
 
-        last_entries.update(last_entries1)
+#        last_entries.update(last_entries1)
 
-    for topic in topics:
-        subtopics2 = Subtopic.objects.filter(topic__text=topic).order_by('-date_added')
-        sum_entries = 0
-        for subtopic in subtopics2:
-            entries = Entry.objects.filter(subtopic__text=subtopic).order_by('-date_added').count()
-            sum_entries += entries
-            sumen1 = {topic.id: sum_entries}
-        sumen.update(sumen1)
+    # for topic in topics:
+    #     subtopics2 = Subtopic.objects.filter(topic__text=topic).order_by('-date_added')
+    #     sum_entries = 0
+    #     for subtopic in subtopics2:
+    #         entries = Entry.objects.filter(subtopic__text=subtopic).order_by('-date_added').count()
+    #         sum_entries += entries
+    #         sumen1 = {topic.id: sum_entries}
+    #     sumen.update(sumen1)
 
 
     context = {'topics': topics, 'sumen': sumen.items(), 'last_entries': last_entries.items(),
                'dict_entry_text':dict_entry_text.items()}
     return render(request, 'ruminity_coms/topics.html', context)
 
-    for topic in topics:
-        subtopics2 = Subtopic.objects.filter(topic__text=topic).order_by('-date_added')
-        sum_entries = 0
-        for subtopic in subtopics2:
-            entries = Entry.objects.filter(subtopic__text=subtopic).order_by('-date_added').count()
-            sum_entries += entries
-            sumen1 = {topic.id: sum_entries}
-        sumen.update(sumen1)
-    #for k,value in sumen.items():
-        #print(k,value)
-    context = {'topics': topics, 'sumen': sumen.items(), 'last_entries': last_entries.items(),
-               'dict_entry_text': dict_entry_text, 'list_last': list_last}
-    return render(request, 'ruminity_coms/topics.html', context)
+    # for topic in topics:
+    #     subtopics2 = Subtopic.objects.filter(topic__text=topic).order_by('-date_added')
+    #     sum_entries = 0
+    #     for subtopic in subtopics2:
+    #         entries = Entry.objects.filter(subtopic__text=subtopic).order_by('-date_added').count()
+    #         sum_entries += entries
+    #         sumen1 = {topic.id: sum_entries}
+    #     sumen.update(sumen1)
+
+    # context = {'topics': topics, 'sumen': sumen.items(), 'last_entries': last_entries.items(),
+    #            'dict_entry_text': dict_entry_text, 'list_last': list_last}
+    # return render(request, 'ruminity_coms/topics.html', context)
 
 
 def subtopics(request, topic_id):
@@ -119,9 +118,20 @@ def subtopics(request, topic_id):
 @login_required
 def subtopic(request, subtopic_id):
     """Показати вибрану підтему з усіма записами."""
-    subtopic = Subtopic.objects.get(id=subtopic_id)
-    entries = subtopic.entry_set.order_by('-date_added')
-    context = {'subtopic': subtopic, 'entries': entries}
+    subtopic = get_object_or_404(Subtopic, id=subtopic_id)
+    comments = subtopic.comments.all()
+
+    if request.method != 'POST':
+        form = CommentFormForum()
+    else:
+        form = CommentFormForum(request.POST)
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.subtopic = subtopic
+            new_comment.save()
+            return HttpResponseRedirect('/topic/' + f'{subtopic_id}')
+
+    context = {'subtopic': subtopic, 'comments': comments, 'form': form}
     return render(request, 'ruminity_coms/subtopic.html', context)
 
 
@@ -159,44 +169,44 @@ def new_subtopic(request, topic_id):
     return render(request, 'ruminity_coms/new_subtopic.html', context)
 
 
-@login_required
-def new_entry(request, subtopic_id):
-    """Створення нового Допису."""
-    subtopic = Subtopic.objects.get(id=subtopic_id)
-    if request.method != 'POST':
-        form = EntryForm()
-    else:
-        form = EntryForm(data=request.POST)
-        if form.is_valid():
-            new_entry = form.save(commit=False)
-            new_entry.subtopic = subtopic
-            new_entry.owner = request.user
-            new_entry.save()
-            return redirect('ruminity_coms:subtopic', subtopic_id=subtopic_id)
+# @login_required
+# def new_entry(request, subtopic_id):
+#     """Створення нового Допису."""
+#     subtopic = Subtopic.objects.get(id=subtopic_id)
+#     if request.method != 'POST':
+#         form = EntryForm()
+#     else:
+#         form = EntryForm(data=request.POST)
+#         if form.is_valid():
+#             new_entry = form.save(commit=False)
+#             new_entry.subtopic = subtopic
+#             new_entry.owner = request.user
+#             new_entry.save()
+#             return redirect('ruminity_coms:subtopic', subtopic_id=subtopic_id)
+#
+#     context = {'subtopic': subtopic, 'form': form}
+#     return render(request, 'ruminity_coms/new_entry.html', context)
 
-    context = {'subtopic': subtopic, 'form': form}
-    return render(request, 'ruminity_coms/new_entry.html', context)
 
-
-@login_required
-def edit_entry(request, entry_id):
-    """Редагування допису."""
-    entry = Entry.objects.get(id=entry_id)
-    subtopic = entry.subtopic
-
-    if entry.owner != request.user:
-        raise Http404
-
-    if request.method != 'POST':
-        form = EntryForm(instance=entry)
-    else:
-        form = EntryForm(instance=entry, data=request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('ruminity_coms:subtopic', subtopic_id=subtopic.id)
-
-    context = {'entry': entry, 'subtopic': subtopic, 'form': form}
-    return render(request, 'ruminity_coms/edit_entry.html', context)
+# @login_required
+# def edit_entry(request, entry_id):
+#     """Редагування допису."""
+#     entry = Entry.objects.get(id=entry_id)
+#     subtopic = entry.subtopic
+#
+#     if entry.owner != request.user:
+#         raise Http404
+#
+#     if request.method != 'POST':
+#         form = EntryForm(instance=entry)
+#     else:
+#         form = EntryForm(instance=entry, data=request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('ruminity_coms:subtopic', subtopic_id=subtopic.id)
+#
+#     context = {'entry': entry, 'subtopic': subtopic, 'form': form}
+#     return render(request, 'ruminity_coms/edit_entry.html', context)
 
 
 @login_required
@@ -236,7 +246,6 @@ def publications(request):
 @login_required
 def publication(request, publication_id):
     """Показати вибрану публікацію."""
-    #publication = Publication.objects.get(id=publication_id)
     publication = get_object_or_404(Publication, id=publication_id)
     comments = publication.comments.all()
 
@@ -248,7 +257,6 @@ def publication(request, publication_id):
             new_comment = form.save(commit=False)
             new_comment.publication = publication
             new_comment.save()
-            #return HttpResponseRedirect(publication.id)
             return HttpResponseRedirect('/publication/' + f'{publication_id}')
     else:
         form = NewCommentForm()
@@ -270,7 +278,6 @@ def new_publication(request):
             print("TEXT: " + form.cleaned_data["text"])
             print("DESCRIPTION: " + form.cleaned_data["description"])
             new_publication.save()
-            #form.save()
             return redirect('ruminity_coms:publications')
     text = "10"
     count_symbol = len(text)
@@ -299,5 +306,10 @@ def edit_publication(request, publication_id):
     return render(request, 'ruminity_coms/edit_publication.html', context)
 
 
+def competitions(request):
+    """Показати всі підтеми до вибраної теми."""
+    competitions = Competition.objects.all()
 
+    context = {'competitions': competitions}
+    return render(request, 'ruminity_coms/competitions.html', context)
 

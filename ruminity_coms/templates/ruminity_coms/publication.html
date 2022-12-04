@@ -6,7 +6,7 @@
   <ol class="breadcrumb" style="background-color: white;">
     <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:index' %}">Головна</a></li>
     <li class="breadcrumb-item active"><a href="{% url 'ruminity_coms:publications' %}">Твори на розгляд</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ publication.text }}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{ publication }}</li>
   </ol>
 </nav>
 {% endblock page_header %}
@@ -30,6 +30,7 @@
                  <div>
                      <hr>
                      <h4 class="text-muted pb-3"><small>{{ publication.description }}</small></h4>
+                                          Автор: ------- Поскаржитися
                      <hr>
                  </div>
         <div class="pb-4">
@@ -41,14 +42,18 @@
                 <img src="{% static "css/images/mood-icon.png" %}" width='25'>
             </button>
         </div>
+        <hr>
+        58 коментарів - Підписатися
+
         {% load mptt_tags %}
-        <div>
+        <div class="pt-4">
             {%  recursetree comments %}
-            <div id="{{ node.id }}" class="my-2 p-2" style="border: 1px solid grey">
-            <p class="pt-2 d-flex justify-content-between">{{ node.name }} у {{ node.date_added }}</p>
-            <div> {{ node.text }} </div>
+            <div id="{{ node.id }}">
+            <p class="pt-2 d-flex justify-content-between">
+                <a href="#">{{ node.name }}</a> у {{ node.date_added }}</p>
+            <div class="pb-2"> {{ node.text }} </div>
+            <button class="btn btn-light" onclick="myFunction({{ node.id }})">Відповісти</button>
             <hr />
-            <button class="button" onclick="myFunction({{ node.id }})">Reply</button>
             </div>
             {% if not node.is_leaf_node %}
                 <div class="children pl-2 pl-md-5">
@@ -60,15 +65,13 @@
 
         <div>
         <form id="myForm" method="post">
-          <h2>Create new comment</h2>
+          <h4>Написати коментар. Будь першим!</h4>
           {{ form.as_p }}
           {% csrf_token %}
-          <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+          <button type="submit" class="btn btn-primary">Відправити</button>
         </form>
       </div>
 
-        <div>
-        </div>
 
     </div>
     <div class="col">
@@ -91,16 +94,16 @@
     a.insertAdjacentHTML('afterend',
 
      '<form id="Form" class="form-insert py-2" method="post"> \
-            <div class="d-flex justify-content-between"><h2>Reply:</h2><div><button type="button" class="btn btn-outline-secondary" onclick="formExit()"">Close</button></div></div> \
+            <div class="d-flex justify-content-end"><div><button type="button" class="btn btn-outline-secondary" onclick="formExit()"">Закрити</button></div></div> \
             <label for="id_name">Name:</label> \
             <input type="text" name="name" class="col-sm-12" maxlength="50" required="" id="id_name">\
             <select name="parent" class="d-none" id="id_parentt"> \
             <option value="' + id + '" selected="' + id + '"></option> \
             </select> \
-            <label for="id_content">Content:</label> \
+            <label for="id_content">Повідомлення:</label> \
             <textarea name="text" cols="40" rows="5" class="form-control" required id="id_content"></textarea> \
             {% csrf_token %} \
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button> \
+            <button type="submit" class="btn btn-primary">Відправити</button> \
           </form>');
 
     //document.querySelector('#id_parentt [value="' + id + '"]').selected = true;
