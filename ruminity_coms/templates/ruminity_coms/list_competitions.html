@@ -4,20 +4,21 @@
 <nav aria-label="breadcrumb" >
   <ol class="breadcrumb card-header">
     <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:index' %}">Головна</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Конкурси</li>
+    <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:competitions' %}">Конкурси</a></li>
+    <li class="breadcrumb-item active">{{ competition }}</li>
   </ol>
 </nav>
 {% endblock page_header %}
 
 {% block content %}
 
-{% for competition in competitions %}
+{% for story in list_stories %}
     <div>
 
         <div>
             <div class="pl-5">
-            <h5><a href="{% url 'ruminity_coms:list_stories' competition.id %}">{{ competition.text }}</a></h5></div>
-            <div class="font-weight-light pl-5">{{ competition.description }}</div>
+            <h5><a href="{% url 'ruminity_coms:story' story.id %}">{{ story.text }}</a></h5></div>
+            <div class="font-weight-light pl-5">{{ story.description }}</div>
         </div>
     </div>
 {% endfor %}

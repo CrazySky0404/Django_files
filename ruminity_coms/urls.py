@@ -1,4 +1,4 @@
-"""Визначає URL patterns для ruminity_coms."""
+"""Визначає URL patterns для uminity_coms."""
 
 from django.urls import path
 
@@ -31,7 +31,7 @@ urlpatterns = [
     # Сторінка, що відображає всі конкурси.
     path('competitions/', views.competitions, name='competitions'),
     # Сторінка, що відображає всі конкурсні роботи вибраного конкурсу.
-    #path('meet/', views.meet, name='meet'),
+    path('list_stories/<int:list_stories_id>/', views.list_stories, name='list_stories'),
     # Сторінка, що відображає окрему конкурсну роботу.
-    #path('story/', views.story, name='story'),
+    path('story/<int:story_id>/', views.story, name='story'),
 ]

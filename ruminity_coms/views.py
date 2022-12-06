@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
-from .models import Topic, Subtopic, Publication, Competition
+from .models import Topic, Subtopic, Publication, Competition, CompetitionSingle
 from .forms import TopicForm, SubtopicForm, PublicationForm, NewCommentForm, CommentFormForum
 
 
@@ -306,10 +306,30 @@ def edit_publication(request, publication_id):
     return render(request, 'ruminity_coms/edit_publication.html', context)
 
 
+@login_required
 def competitions(request):
-    """Показати всі підтеми до вибраної теми."""
+    """Показати всі конкурси."""
     competitions = Competition.objects.all()
 
     context = {'competitions': competitions}
     return render(request, 'ruminity_coms/competitions.html', context)
 
+
+@login_required
+def list_stories(request, list_stories_id):
+    """Показати всі твори до вибраного конкурсу."""
+    competition = Competition.objects.get(id=list_stories_id)
+    list_stories = competition.single.order_by('-date_added')
+
+    context = {'list_stories': list_stories, "competition": competition}
+    return render(request, 'ruminity_coms/list_competitions.html', context)
+
+
+@login_required
+def story(request, story_id):
+    """Показати окрему роботу до вибраного конкурсу."""
+    story = CompetitionSingle.objects.get(id=story_id)
+    #story = stories.competition_set.order_by('-date_added')
+
+    context = {'story': story}
+    return render(request, 'ruminity_coms/story.html', context)

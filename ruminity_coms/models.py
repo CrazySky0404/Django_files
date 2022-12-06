@@ -110,7 +110,7 @@ class Competition(models.Model):
 
 class CompetitionSingle(models.Model):
     """Окрема сторінка конкурсної роботи."""
-    stories = models.ForeignKey(Competition, on_delete=models.CASCADE)
+    competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name='single')
     text = models.CharField(max_length=300)
     description = models.TextField(max_length=1500, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
