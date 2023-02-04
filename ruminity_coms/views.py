@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 from .models import Topic, Subtopic, Publication, Competition, CompetitionSingle
-from .forms import TopicForm, SubtopicForm, PublicationForm, NewCommentForm, CommentFormForum
+from .forms import TopicForm, SubtopicForm, PublicationForm, NewCommentForm, CommentFormForum, CommentFormStory
 
 
 def index(request):
@@ -328,8 +328,22 @@ def list_stories(request, list_stories_id):
 @login_required
 def story(request, story_id):
     """Показати окрему роботу до вибраного конкурсу."""
-    story = CompetitionSingle.objects.get(id=story_id)
-    #story = stories.competition_set.order_by('-date_added')
+    #story = CompetitionSingle.objects.get(id=story_id)
+    story = get_object_or_404(CompetitionSingle, id=story_id)
+    comments = story.comments.all()
 
-    context = {'story': story}
+    new_comment = None
+
+    if request.method == 'POST':
+        form = CommentFormStory(request.POST)
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.story = story
+            new_comment.save()
+            return HttpResponseRedirect('/story/' + f'{story_id}')
+    else:
+        form = CommentFormStory()
+
+    context = {'story': story, 'comments': comments, 'form': form, 'new_comment': new_comment}
     return render(request, 'ruminity_coms/story.html', context)
+
