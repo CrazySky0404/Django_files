@@ -2,7 +2,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-
+from django.urls import reverse
 
 from .models import Topic, Subtopic, Publication, Competition, CompetitionSingle
 from .forms import TopicForm, SubtopicForm, PublicationForm, NewCommentForm, CommentFormForum, CommentFormStory
@@ -29,38 +29,9 @@ def topics(request):
         list_entry_id_2 = []
         dict_topic_text1 = {topic.id: topic.text}
 
-        # for subtopic in subtopics:
-        #     entries = Entry.objects.filter(subtopic__text=subtopic).order_by('-id')[:1]
-        #     if not entries:
-        #         pass
-        #     else:
-        #         list_entry.append(entries)
-        #         for entry in Entry.objects.filter(subtopic__text=subtopic).order_by('-id'):
-        #             list_entry_id_2.append(entry.id)
-        #             dict_entry_text2 = {entry.id: entry.text}
-        #             dict_entry_text.update(dict_entry_text2)
-        #
-        #     for entry in Entry.objects.filter(subtopic__text=subtopic).order_by('-id'):
-        #         entry1 = entry.text
-        #         entry2 = entry.id
-        #         entry3.append(entry2)
-        #         entry4.append(entry1)
-        # dict_topic_text.update(dict_topic_text1)
-
         list_y = sorted(list_entry_id_2)
         for x in list_y:
              last_entries1 = {topic.id: x}
-
-#        last_entries.update(last_entries1)
-
-    # for topic in topics:
-    #     subtopics2 = Subtopic.objects.filter(topic__text=topic).order_by('-date_added')
-    #     sum_entries = 0
-    #     for subtopic in subtopics2:
-    #         entries = Entry.objects.filter(subtopic__text=subtopic).order_by('-date_added').count()
-    #         sum_entries += entries
-    #         sumen1 = {topic.id: sum_entries}
-    #     sumen.update(sumen1)
 
 
     context = {'topics': topics, 'sumen': sumen.items(), 'last_entries': last_entries.items(),
@@ -315,22 +286,30 @@ def competitions(request):
     return render(request, 'ruminity_coms/competitions.html', context)
 
 
+#@login_required
+# def stories(request, competition_slug):
+#     """Показати всі твори до вибраного конкурсу."""
+#     competition = get_object_or_404(Competition, slug=competition_slug)
+#
+#     list_stories = stories.single.order_by('-date_added')
+#     context = {'list_stories': list_stories, 'competition': competition}
+#     return render(request, 'ruminity_coms/list_competitions.html', context)
 @login_required
-def list_stories(request, list_stories_id):
+def stories(request, competition_slug):
     """Показати всі твори до вибраного конкурсу."""
-    competition = Competition.objects.get(id=list_stories_id)
-    list_stories = competition.single.order_by('-date_added')
+    competition = get_object_or_404(Competition, slug=competition_slug)
 
-    context = {'list_stories': list_stories, "competition": competition}
+    list_stories = competition.single.order_by('-date_added')
+    context = {'list_stories': list_stories, 'competition': competition}
     return render(request, 'ruminity_coms/list_competitions.html', context)
 
 
+
 @login_required
-def story(request, story_id):
+def post(request, competition_slug, post):
     """Показати окрему роботу до вибраного конкурсу."""
-    #story = CompetitionSingle.objects.get(id=story_id)
-    story = get_object_or_404(CompetitionSingle, id=story_id)
-    comments = story.comments.all()
+    post = get_object_or_404(CompetitionSingle, slug=post, competition__slug=competition_slug)
+    comments = post.comments.all()
 
     new_comment = None
 
@@ -338,12 +317,12 @@ def story(request, story_id):
         form = CommentFormStory(request.POST)
         if form.is_valid():
             new_comment = form.save(commit=False)
-            new_comment.story = story
+            new_comment.post = post
             new_comment.save()
-            return HttpResponseRedirect('/story/' + f'{story_id}')
+            return redirect('ruminity_coms:post', competition_slug=post.competition.slug, post=post.slug)
     else:
         form = CommentFormStory()
 
-    context = {'story': story, 'comments': comments, 'form': form, 'new_comment': new_comment}
-    return render(request, 'ruminity_coms/story.html', context)
+    context = {'post': post, 'comments': comments, 'form': form, 'new_comment': new_comment}
+    return render(request, 'ruminity_coms/post.html', context)
 

@@ -1,26 +1,28 @@
 {% extends "ruminity_coms/base.html" %}
 
 {% block page_header %}
-<nav aria-label="breadcrumb" >
-  <ol class="breadcrumb card-header">
-    <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:index' %}">Головна</a></li>
-    <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:competitions' %}">Конкурси</a></li>
-    <li class="breadcrumb-item active">{{ competition }}</li>
-  </ol>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb card-header">
+        <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:index' %}">Головна</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:competitions' %}">Конкурси</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ competition.text }}</li>
+    </ol>
 </nav>
 {% endblock page_header %}
 
 {% block content %}
 
-{% for story in list_stories %}
-    <div>
+{% for post in list_stories %}
+<div>
 
-        <div>
-            <div class="pl-5">
-            <h5><a href="{% url 'ruminity_coms:story' story.id %}">{{ story.text }}</a></h5></div>
-            <div class="font-weight-light pl-5">{{ story.description }}</div>
-        </div>
+    <div>
+        <div class="pl-5">
+            {# Виведіть назву конкурсної роботи #}
+<h5><a href="{% url 'ruminity_coms:post' post.competition.slug post.slug %}">{{ post.text }}</a></h5>
+
+        <div class="font-weight-light pl-5">{{ post.description }}</div>
     </div>
+</div>
 {% endfor %}
 <hr>
 

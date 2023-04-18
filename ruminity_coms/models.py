@@ -1,3 +1,7 @@
+from django.template.defaultfilters import slugify
+from django.urls import reverse
+from django.utils import timezone
+
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 
@@ -27,22 +31,6 @@ class Subtopic(models.Model):
     def __str__(self):
         """Повернути рядкове представлення моделі."""
         return self.text
-
-
-# class Entry(models.Model):
-#     """Конкретна інформація до підтеми."""
-#     subtopic = models.ForeignKey(Subtopic, on_delete=models.CASCADE)
-#     text = models.CharField(max_length=300)
-#     date_added = models.DateTimeField(auto_now_add=True)
-#     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-#
-#     class Meta:
-#         verbose_name_plural = 'entries'
-#         # ordering = ['-date_added']
-#
-#     def __str__(self):
-#         """Повернути рядкове представлення моделі."""
-#         return self.text
 
 
 class Publication(models.Model):
@@ -102,7 +90,9 @@ class Competition(models.Model):
     text = models.CharField(max_length=300)
     description = models.TextField(null=True)
     date_added = models.DateTimeField(auto_now_add=True)
-
+    slug = models.SlugField(max_length=100, unique_for_date='date_added')
+    def get_absolute_url(self):
+        return reverse('ruminity_coms:competition', args=[self.slug])
     def __str__(self):
         """Повернути рядкове представлення моделі."""
         return self.text
@@ -114,9 +104,17 @@ class CompetitionSingle(models.Model):
     text = models.CharField(max_length=300)
     description = models.TextField(max_length=1500, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
+    slug = models.SlugField(max_length=100, unique_for_date='date_added')
+    publish = models.DateTimeField(default=timezone.now)
+
+    # def save(self, *args, **kwargs):
+    #     self.slug = slugify(self.text)
+    #     super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('ruminity_coms:post', args=[self.competition.slug, self.slug])
 
     class Meta:
-        #verbose_name_plural = 'subtopics'
         ordering = ['-date_added']
 
     def __str__(self):

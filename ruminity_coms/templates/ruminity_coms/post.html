@@ -6,8 +6,7 @@
   <ol class="breadcrumb card-header">
     <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:index' %}">Головна</a></li>
     <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:competitions' %}">Конкурси</a></li>
-    <li class="breadcrumb-item active"><a href="{% url 'ruminity_coms:list_stories' story.competition.id %}">{{ story.competition }}</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ story }}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{ post }}</li>
   </ol>
 </nav>
 {% endblock page_header %}
@@ -21,15 +20,15 @@
     <div class="col-9">
         <center><img src="{% static "css/images/icon-public.jpg" %}" width='40' class="pb-4 pt-5"></center>
                  <h2>
-                    <center>{{ story.text }}</center>
+                    <center>{{ post.text }}</center>
                  </h2>
                     <center>
                         <span class="text-secondary font-italic">Опубліковано:</span>
-                         <span class="text-primary font-italic">{{ story.date_added|date:'M d, Y H:i' }}</span>
+                         <span class="text-primary font-italic">{{ post.date_added|date:'M d, Y H:i' }}</span>
                     </center>
                  <div>
                      <hr>
-                     <h4 class="text-muted pb-3"><small>{{ story.description }}</small></h4>
+                     <h4 class="text-muted pb-3"><small>{{ post.description }}</small></h4>
                                           Автор: ------- Поскаржитися
                      <hr>
                  </div>

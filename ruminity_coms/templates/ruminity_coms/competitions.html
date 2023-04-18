@@ -5,6 +5,7 @@
   <ol class="breadcrumb card-header">
     <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:index' %}">Головна</a></li>
     <li class="breadcrumb-item active" aria-current="page">Конкурси</li>
+
   </ol>
 </nav>
 {% endblock page_header %}
@@ -16,11 +17,14 @@
 
         <div>
             <div class="pl-5">
-            <h5><a href="{% url 'ruminity_coms:list_stories' competition.id %}">{{ competition.text }}</a></h5></div>
+                {{ competition.slug }}
+                <h5><a href="{{ competition.slug }}">{{ competition.text }}</a></h5>
+
             <div class="font-weight-light pl-5">{{ competition.description }}</div>
         </div>
     </div>
 {% endfor %}
 <hr>
+
 
 {% endblock content %}
