@@ -6,6 +6,7 @@
   <ol class="breadcrumb card-header">
     <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:index' %}">Головна</a></li>
     <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:competitions' %}">Конкурси</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'ruminity_coms:competitions' post.competition.slug %}">{{ post.competition }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{ post }}</li>
   </ol>
 </nav>

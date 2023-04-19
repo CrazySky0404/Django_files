@@ -31,8 +31,7 @@ urlpatterns = [
     # Сторінка, що відображає всі конкурси.
     path('competitions/', views.competitions, name='competitions'),
     # Сторінка, що відображає всі конкурсні роботи вибраного конкурсу.
-    path('competitions/<slug:competition_slug>/', views.stories, name='stories'),
-    #path('competition/<slug:stories>/', views.stories, name='stories'),
+    path('competitions/<slug:competition_slug>/', views.stories, name='competitions'),
     # Сторінка, що відображає окрему конкурсну роботу.
     #path('competition/<slug:stories>/<slug:post>/', views.post, name='post'),
     path('competition/<slug:competition_slug>/<slug:post>/', views.post, name='post')
