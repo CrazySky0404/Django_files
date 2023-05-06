@@ -1,0 +1,117 @@
+{% extends "uminity_coms/base.html" %}
+{% load static %}
+
+{% block page_header %}
+<nav aria-label="breadcrumb" >
+  <ol class="breadcrumb card-header">
+    <li class="breadcrumb-item"><a href="{% url 'uminity_coms:index' %}">Головна</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'uminity_coms:competitions' %}">Конкурси</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'uminity_coms:competitions' post.competition.slug %}">{{ post.competition }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ post }}</li>
+  </ol>
+</nav>
+{% endblock page_header %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col-9">
+        <center><img src="{% static "css/images/icon-public.jpg" %}" width='40' class="pb-4 pt-5"></center>
+                 <h2>
+                    <center>{{ post.text }}</center>
+                 </h2>
+                    <center>
+                        <span class="text-secondary font-italic">Опубліковано:</span>
+                         <span class="text-primary font-italic">{{ post.date_added|date:'M d, Y H:i' }}</span>
+                    </center>
+                 <div>
+                     <hr>
+                     <h4 class="text-muted pb-3"><small>{{ post.description }}</small></h4>
+                                          Автор: ------- Поскаржитися
+                     <hr>
+                 </div>
+        <div class="pb-4">
+            <h5 class="pt-2">Які враження?</h5><br>
+            <button name="submit" class="btn btn-success">20 - Сподобалося
+                <img src="{% static "css/images/smile-icon.png" %}" width='25'>
+            </button>
+            <button name="submit" class="btn btn-secondary">5 - Спробуй ще
+                <img src="{% static "css/images/mood-icon.png" %}" width='25'>
+            </button>
+        </div>
+        <hr>
+        58 коментарів - Підписатися
+
+        {% load mptt_tags %}
+        <div class="pt-4">
+            {%  recursetree comments %}
+            <div id="{{ node.id }}">
+            <p class="pt-2 d-flex justify-content-between">
+                <a href="#">{{ node.name }}</a> у {{ node.date_added }}</p>
+            <div class="pb-2"> {{ node.text }} </div>
+            <button class="btn btn-light" onclick="myFunction({{ node.id }})">Відповісти</button>
+            <hr />
+            </div>
+            {% if not node.is_leaf_node %}
+                <div class="children pl-2 pl-md-5">
+                    {{ children }}
+                </div>
+            {% endif %}
+            {% endrecursetree %}
+        </div>
+
+        <div>
+        <form id="myFormcom" method="post">
+          <h4>Написати коментар. Будь першим!</h4>
+          {{ form.as_p }}
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary">Відправити</button>
+        </form>
+      </div>
+
+
+    </div>
+    <div class="col">
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function formExit() {
+    document.getElementById("Form").remove();
+  }
+
+    function myFunction(id) {
+
+     if (document.contains(document.getElementById("Form"))) {
+      document.getElementById("Form").remove();
+    }
+
+    var a = document.getElementById(id);
+    a.insertAdjacentHTML('afterend',
+
+     '<form id="Form" class="form-insert py-2" method="post"> \
+            <div class="d-flex justify-content-end"><div><button type="button" class="btn btn-outline-secondary" onclick="formExit()"">Закрити</button></div></div> \
+            <label for="id_name">Name:</label> \
+            <input type="text" name="name" class="col-sm-12" maxlength="50" required="" id="id_name">\
+            <select name="parent" class="d-none" id="id_parentt"> \
+            <option value="' + id + '" selected="' + id + '"></option> \
+            </select> \
+            <label for="id_content">Повідомлення:</label> \
+            <textarea name="text" cols="40" rows="5" class="form-control" required id="id_content"></textarea> \
+            {% csrf_token %} \
+            <button type="submit" class="btn btn-primary">Відправити</button> \
+          </form>');
+
+    //document.querySelector('#id_parentt [value="' + id + '"]').selected = true;
+    }
+
+
+    $('#myFormcom').trigger("reset");
+</script>
+
+{% endblock content %}

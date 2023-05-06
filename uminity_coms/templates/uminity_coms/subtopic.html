@@ -1,0 +1,119 @@
+{% extends "uminity_coms/base.html" %}
+
+{% block page_header %}
+<nav aria-label="breadcrumb" >
+  <ol class="breadcrumb card-header">
+    <li class="breadcrumb-item"><a href="{% url 'uminity_coms:index' %}">Головна</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'uminity_coms:topics' %}">Форум</a></li></li>
+    <li class="breadcrumb-item" ><a href="{%url 'uminity_coms:subtopics' subtopic.topic.id %}">{{ subtopic.topic }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ subtopic }}</li>
+  </ol>
+</nav>
+{% endblock page_header %}
+
+{% block content %}
+
+<div class="card mb-3">
+    <h5 class="card-header">
+        Підтема "{{subtopic}}" &nbsp;
+    </h5>
+    <p class="card-body">{{ subtopic.description }}</p>
+</div>
+
+<br><br>
+
+
+        <hr>
+        58 коментарів - Підписатися
+
+        {% load mptt_tags %}
+        <div class="pt-4">
+            {%  recursetree comments %}
+            <div id="{{ node.id }}">
+            <p class="pt-2 d-flex justify-content-between">
+                <a href="#">{{ node.name }}</a> у {{ node.date_added }}</p>
+            <div class="pb-2"> {{ node.text }} </div>
+            <button class="btn btn-light" onclick="myFunctionforum({{ node.id }})">Відповісти</button>
+            <hr />
+            </div>
+            {% if not node.is_leaf_node %}
+                <div class="children pl-2 pl-md-5">
+                    {{ children }}
+                </div>
+            {% endif %}
+            {% endrecursetree %}
+        </div>
+
+        <div>
+        <form id="Form_forum" method="post">
+          <h4>Написати коментар. Будь першим!</h4>
+          {{ form.as_p }}
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary">Відправити</button>
+        </form>
+      </div>
+
+
+
+
+{% if entries.has_other_pages %}
+<div class="d-flex justify-content-center">
+    <ul class="pagination">
+        {% if entries.has_previous %}
+         <li><a href="?page={{entries.previous_page_number}}" class="page-link">&laquo</a></li>
+        {% endif %}
+
+        {% for page in custom_range %}
+        {% if page == entries.number %}
+         <li class="page-item active" aria-current="page">
+         <a href="?page={{page}}" class="page-link">{{page}}</a>
+         </li>
+        {% else %}
+        <li><a href="?page={{page}}" class="page-link">{{page}}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if entries.has_next %}
+         <li><a href="?page={{entries.next_page_number}}" class="btn page-link">&raquo</a></li>
+        {% endif %}
+    </ul>
+</div>
+
+{% endif %}
+
+<script>
+
+  function formExit() {
+    document.getElementById("Form").remove();
+  }
+
+    function myFunctionforum(id) {
+
+     if (document.contains(document.getElementById("Form"))) {
+      document.getElementById("Form").remove();
+    }
+
+    var a = document.getElementById(id);
+    a.insertAdjacentHTML('afterend',
+
+     '<form id="Form" class="form-insert py-2" method="post"> \
+            <div class="d-flex justify-content-end"><div><button type="button" class="btn btn-outline-secondary" onclick="formExit()"">Закрити</button></div></div> \
+            <label for="id_name">Name:</label> \
+            <input type="text" name="name" class="col-sm-12" maxlength="50" required="" id="id_name">\
+            <select name="parent" class="d-none" id="id_parentt"> \
+            <option value="' + id + '" selected="' + id + '"></option> \
+            </select> \
+            <label for="id_content">Повідомлення:</label> \
+            <textarea name="text" cols="40" rows="5" class="form-control" required id="id_content"></textarea> \
+            {% csrf_token %} \
+            <button type="submit" class="btn btn-primary">Відправити</button> \
+          </form>');
+
+    //document.querySelector('#id_parentt [value="' + id + '"]').selected = true;
+    }
+
+
+    $('#Form_forum').trigger("reset");
+</script>
+
+{% endblock content %}

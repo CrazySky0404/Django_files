@@ -1,0 +1,12 @@
+{% extends "uminity_coms/base.html" %}
+
+{% block content %}
+    <p>Додати нову тему:</p>
+
+<form action="{% url 'uminity_coms:new_topic' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button name="submit">Додати тему</button>
+</form>
+
+{% endblock content %}
