@@ -10,6 +10,13 @@ exclude = '''
 '''
 
 [tool.pylint.message_control]
-max-line-length = 160
+max-line-length = 120
+
+[tool.pylint.master]
+ignore-paths = [
+    "uminity_coms/migrations/*",
+]
+[tool.pylint.'pylint.checkers']
+disable = "R0903"
 
 

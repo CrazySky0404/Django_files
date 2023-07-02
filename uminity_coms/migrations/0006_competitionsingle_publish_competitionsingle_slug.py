@@ -19,9 +19,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="competitionsingle",
             name="slug",
-            field=models.SlugField(
-                default=1, max_length=250, unique_for_date="date_added"
-            ),
+            field=models.SlugField(default=1, max_length=250, unique_for_date="date_added"),
             preserve_default=False,
         ),
     ]

@@ -132,9 +132,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="subtopic",
             name="topic",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to="uminity_coms.topic"
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="uminity_coms.topic"),
         ),
         migrations.CreateModel(
             name="PublicationComment",
