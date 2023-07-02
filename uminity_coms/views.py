@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from .models import Topic, Subtopic, Publication, Competition, CompetitionSingle
+from .models import Topic, Subtopic, Publication, Competition, CompetitionSingle, Books
 from .forms import (
     TopicForm,
     SubtopicForm,
@@ -195,6 +195,17 @@ def new_subtopic(request, topic_id):
 #
 #     context = {'entry': entry, 'subtopic': subtopic, 'form': form}
 #     return render(request, 'uminity_coms/edit_entry.html', context)
+
+
+@login_required
+def books(request):
+    """Показати список книг."""
+    all_books = Books.objects.all()
+
+    context = {
+        "publications": all_books,
+    }
+    return render(request, "uminity_coms/books.html", context)
 
 
 @login_required

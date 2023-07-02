@@ -4,7 +4,7 @@ from django.urls import path
 
 from . import views
 
-app_name = "uminity_coms"
+APP_NAME = "uminity_coms"
 urlpatterns = [
     # Головна сторінка.
     path("", views.index, name="index"),
@@ -18,10 +18,8 @@ urlpatterns = [
     path("new_topic/", views.new_topic, name="new_topic"),
     # Сторінка для додавання нової Підтеми.
     path("new_subtopic/<int:topic_id>/", views.new_subtopic, name="new_subtopic"),
-    # Сторінка для додавання нового Допису.
-    # path('new_entry/<int:subtopic_id>/', views.new_entry, name='new_entry'),
-    # Сторінка для редагування допису.
-    # path('edit_entry/<int:entry_id>/', views.edit_entry, name='edit_entry'),
+    # Сторінка, що відображає всі книги.
+    path("books/", views.books, name="books"),
     # Сторінка, що відображає всі твори на розгляд.
     path("publications/", views.publications, name="publications"),
     # Сторінка для публікації твору на розгляд.

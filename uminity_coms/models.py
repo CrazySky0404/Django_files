@@ -21,6 +21,19 @@ class Topic(models.Model):
         return str(self.text)
 
 
+class Books(models.Model):
+    """Список книжок."""
+
+    text = models.CharField(max_length=300)
+    description = models.TextField(null=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
+
+    def __str__(self):
+        """Повернути рядкове представлення моделі."""
+        return str(self.text)
+
+
 class Subtopic(models.Model):
     """Підтема до теми, яку вивчає користувач."""
 

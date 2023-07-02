@@ -59,6 +59,10 @@
                                    role="button">Форум</a>
                         </li>
                         <li class="nav-item">
+                          <a class="nav-link rounded" href="{% url 'uminity_coms:books' %}"
+                                role="button">Книги</a>
+                        </li>
+                        <li class="nav-item">
                           <a class="nav-link rounded mr-1 ml-1 " href="{% url 'uminity_coms:publications' %}"
                              role="button">
                                         Твори на розгляд</a>
@@ -101,7 +105,13 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#16"><img src="{% static "css/images/icon-public.jpg" %}" width="20" class="pr-1">Профіль</a>
                                 <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="17#">Мої книжки</a>
+                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="17#">Сповіщення</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="17#">Мої покупки</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="17#">Опублікувати книгу</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'users:logout' %}">Вихід</a>
                               </div>

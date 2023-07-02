@@ -1,0 +1,23 @@
+{% extends "uminity_coms/base.html" %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+<nav aria-label="breadcrumb" >
+  <ol class="breadcrumb" style="background-color: white">
+    <li class="breadcrumb-item"><a href="{% url 'uminity_coms:index' %}">Головна</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Список книг</li>
+  </ol>
+</nav>
+{% endblock page_header %}
+
+{% block content %}
+
+<div class="card mb-3">
+    <h6>Детектив / Дитяча література / Художня література / Автобіографії / Історичні</h6>
+    <h5 class="card-header">
+        Список книжок &nbsp;(квадратики - як сторінці з Конкурсами)
+    </h5>
+</div>
+
+
+{% endblock content %}
