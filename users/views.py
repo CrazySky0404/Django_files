@@ -5,19 +5,19 @@ from django.contrib.auth.forms import UserCreationForm
 
 def register(request):
     """Регістрація нового користувача."""
-    if request.method != 'POST':
+    if request.method != "POST":
         # Показати порожню форму.
         form = UserCreationForm()
     else:
-         # Опрацювати заповнену форму.
+        # Опрацювати заповнену форму.
         form = UserCreationForm(data=request.POST)
 
         if form.is_valid():
             new_user = form.save()
             login(request, new_user)
             # Авторизувати користувача та спрямувати його на головну сторінку.
-            return redirect('ruminity_coms:index')
+            return redirect("uminity_coms:index")
 
     # Показати порожню форму або недійсну.
-    context = {'form': form}
-    return render(request, 'registration/register.html', context)
+    context = {"form": form}
+    return render(request, "registration/register.html", context)

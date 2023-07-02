@@ -1,0 +1,59 @@
+{% extends "uminity_coms/base.html" %}
+
+{% block page_header %}
+<nav aria-label="breadcrumb" >
+  <ol class="breadcrumb card-header" style="background-color: white;">
+    <li class="breadcrumb-item"><a href="{% url 'uminity_coms:index' %}">Головна</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'uminity_coms:topics' %}">Форум</a></li></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ topic }}</li>
+  </ol>
+</nav>
+{% endblock page_header %}
+
+{% block content %}
+
+<div class="card mb-3">
+    <h5 class="card-header">
+        Тема "{{topic}}" &nbsp;
+        <a class="btn btn-primary" href="{% url 'uminity_coms:new_subtopic' topic.id %}"" role="button">Додати підтему</a>
+    </h5>
+</div>
+
+{% for subtopic in subtopics %}
+<div class="card mb-3">
+    <h4 class="card-header">
+        <a href="{% url 'uminity_coms:subtopic' subtopic.id %}">{{ subtopic }}</a><br>
+    </h4>
+        <div class="card-body">{{ subtopic.description }}
+        </div>
+</div>
+{% empty %}
+    <p>Не додано жодної підтеми.</p>
+{% endfor %}
+
+{% if subtopics.has_other_pages %}
+<div class="d-flex justify-content-center">
+    <ul class="pagination">
+        {% if subtopics.has_previous %}
+         <li><a href="?page={{subtopics.previous_page_number}}" class="page-link">&laquo</a></li>
+        {% endif %}
+
+        {% for page in custom_range %}
+        {% if page == subtopics.number %}
+         <li class="page-item active" aria-current="page">
+         <a href="?page={{page}}" class="page-link">{{page}}</a>
+         </li>
+        {% else %}
+        <li><a href="?page={{page}}" class="page-link">{{page}}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if subtopics.has_next %}
+         <li><a href="?page={{subtopics.next_page_number}}" class="btn page-link">&raquo</a></li>
+        {% endif %}
+    </ul>
+</div>
+
+{% endif %}
+
+{% endblock content %}

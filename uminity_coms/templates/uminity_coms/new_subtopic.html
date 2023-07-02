@@ -1,0 +1,14 @@
+{% extends "uminity_coms/base.html" %}
+
+{% block content %}
+<p><a href="{% url 'uminity_coms:subtopics' topic.id %}">{{ topic }}</a></p>
+
+<p>Додати нову підтему:</p>
+
+<form action="{% url 'uminity_coms:new_subtopic' topic.id %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button name="submit">Додати підтему</button>
+</form>
+
+{% endblock content %}
