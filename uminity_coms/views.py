@@ -363,3 +363,8 @@ def post(request, competition_slug, post):  # pylint: disable=redefined-outer-na
         "new_comment": new_comment,
     }
     return render(request, "uminity_coms/post.html", context)
+
+
+def my_account(request):
+    """Відображає профіль користувача."""
+    return render(request, "uminity_coms/my_account.html")

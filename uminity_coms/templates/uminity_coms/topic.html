@@ -2,7 +2,7 @@
 
 {% block page_header %}
 <nav aria-label="breadcrumb" >
-  <ol class="breadcrumb card-header" style="background-color: white;">
+  <ol class="breadcrumb card-header">
     <li class="breadcrumb-item"><a href="{% url 'uminity_coms:index' %}">Головна</a></li>
     <li class="breadcrumb-item"><a href="{% url 'uminity_coms:topics' %}">Форум</a></li></li>
     <li class="breadcrumb-item active" aria-current="page">{{ topic }}</li>
@@ -15,7 +15,7 @@
 <div class="card mb-3">
     <h5 class="card-header">
         Тема "{{topic}}" &nbsp;
-        <a class="btn btn-primary" href="{% url 'uminity_coms:new_subtopic' topic.id %}"" role="button">Додати підтему</a>
+        <a class="btn btn-primary" href="{% url 'uminity_coms:new_subtopic' topic.id %}" role="button">Додати підтему</a>
     </h5>
 </div>
 

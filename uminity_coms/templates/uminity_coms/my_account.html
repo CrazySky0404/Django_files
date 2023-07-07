@@ -1,0 +1,41 @@
+{% extends "uminity_coms/base.html" %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block page_header %}
+<nav aria-label="breadcrumb" >
+  <ol class="breadcrumb card-header">
+    <li class="breadcrumb-item"><a href="{% url 'uminity_coms:index' %}">Головна</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Профіль користувача</li>
+  </ol>
+</nav>
+{% endblock page_header %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<div style="padding-top: 5px; padding-left: 45px;">
+    <div class="horizontal-block-topic" style="background-color: #EDEDED;">
+        <p class="profile-link">{{ user.username }}</p>
+        <p class="member-since">Дата реєстрації:  {{ user.date_joined|date:"m/d" }}</p>
+    </div>
+    <a class="btn btn-primary btn-account" href="{% url 'uminity_coms:new_publication' %}" role="button">Профіль</a><br>
+    <a class="btn btn-primary btn-account" href="{% url 'uminity_coms:new_publication' %}" role="button">Мої книжки</a><br>
+    <a class="btn btn-primary btn-account" href="{% url 'uminity_coms:new_publication' %}" role="button">Опублікувати книгу</a><br>
+    <a class="btn btn-primary btn-account exit" href="{% url 'users:logout' %}" role="button">Вихід</a><br>
+
+{% else %}
+    <a href="{% url 'users:register' %}">Реєстрація</a>
+    <a href="{% url 'users:login' %}">Вхід</a>
+{% endif %}
+</div>
+
+
+{% endblock content %}
+
+
+
+
+
+
+

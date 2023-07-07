@@ -1,12 +1,38 @@
+/*.navbar {*/
+/*    background: repeating-radial-gradient(circle, #6254a5, #3474de 80%, #3f356e 100%);*/
+/*}*/
+/*#background: linear-gradient(to right, #413976, #413976 50%, #fbcc56 100%); 79589F - button*/
 
+.gradient-header {
+    background: linear-gradient(to right, #413976 10%, #6254a5 50%, #3474de);
+}
+.btn.btn-primary {
+  background-color: #6f62a9;
+  color: #ffffff;
+  border: none;
+}
 
-.btn-top {
-    padding-top: 8px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    padding-right: px;
-    margin: 1px;
-    background-color: #f9b928;
+.btn.btn-primary:hover {
+  background-color: #6254a5;
+}
+/* breadcrumb - start */
+.breadcrumb-item {
+  font-family: Poppins-SemiBold, sans-serif;
+}
+
+.breadcrumb-item a {
+  color: #3474de;
+}
+/* breadcrumb - end */
+
+h4 a,
+h5 a,
+h3 a {
+  color: #3474de;
+}
+
+.dropdown-toggle.account-link {
+  color: #413976;
 }
 
 .on-right {
@@ -17,18 +43,179 @@
 .jumbotron {
   background-image: url("images/12.jpg");
   background-size: cover;
-  height: 100%;}
+  height: 100%;
 }
-
 
 .text-primary {
   color: #0d6efd !important;
 }
 
-.btn-pr:hover{
-    background-color: red!important;
-    color: red!important;
+/* account - start */
+@font-face {
+  font-family: 'Poppins-SemiBold';
+  src: url('../fonts/FontsFree-Net-Poppins-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
 
+@font-face {
+  font-family: 'BlinkMacSystemFont';
+  src: url('../fonts/Blink.otf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
 
+@font-face {
+  font-family: 'Segoe UI';
+  src: url('../fonts/SegoeUIVF.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('../fonts/Roboto-Regular.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Oxygen';
+  src: url('../fonts/Oxygen-Regular.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cantarell';
+  src: url('../fonts/Cantarell-Regular.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'sans-serif';
+  src: url('../fonts/SansSerif.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+.profile-link {
+  text-transform: capitalize;
+  height: 36px;
+  font-size: 34px;
+  font-weight: 600;
+  font-family: Poppins-SemiBold, sans-serif;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #444;
+  margin: 0;
+}
+
+.member-since {
+  height: 16px;
+  font-size: 11px;
+  font-weight: 400;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  font-family: Segoe UI,Roboto,Oxygen,Cantarell,sans-serif;
+  color: #737373;
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+
+.account-nav {
+  font-family: Poppins-SemiBold, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #444;
+  width: 25%;
+}
+
+.horizontal-block-topic {
+  width: 15%;
+  margin-top: 5px;
+  padding: 12px 0 1px 0;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.horizontal-block {
+  width: 15%;
+  margin-top: 5px;
+  padding: 12px 0 1px 0;
+  border-radius: 10px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.horizontal-block p {
+  color: #6b6767;
+  font-family: Poppins-SemiBold, sans-serif;
+  font-size: 14px;
+}
+
+.horizontal-block:hover {
+  background-color: #444;
+}
+
+.horizontal-block .no-hover:hover {
+  background-color: #e8e8e8;
+}
+
+.btn-primary.btn-account {
+  background-color: #dadada;
+  color: #333333;
+  font-family: Poppins-SemiBol, sans-serif;
+  padding-bottom: 10px;
+}
+
+.btn-primary.btn-account.exit {
+  background-color: #EDEDED;
+  color: #6c6b6b;
+  font-family: Poppins-SemiBol, sans-serif;
+  padding-bottom: 10px;
+  margin-top: 10px;
+}
+
+.btn-account {
+  width: 15%;
+  font-size: 18px;
+  padding: 10px 20px;
+  margin-top: 5px;
+}
+
+.btn-account:active,
+.btn-account:hover,
+.btn-account:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: #cecdcd !important;
+  color: #333333 !important;
+}
+/* account - end */
+
+/* head - start */
+.logo-font {
+  font-family: BlinkMacSystemFont, sans-serif;
+  margin-top: 5px;
+}
+
+.top-menu-font {
+  font-family: Oxygen, sans-serif;
+}
+
+.account-font {
+  font-family: Poppins-SemiBol, sans-serif;
+}
+/* head - end */
 
 

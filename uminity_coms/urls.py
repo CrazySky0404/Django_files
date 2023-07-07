@@ -4,7 +4,8 @@ from django.urls import path
 
 from . import views
 
-APP_NAME = "uminity_coms"
+app_name = "uminity_coms"  # pylint: disable=invalid-name
+
 urlpatterns = [
     # Головна сторінка.
     path("", views.index, name="index"),
@@ -31,6 +32,7 @@ urlpatterns = [
     # Сторінка, що відображає всі конкурсні роботи вибраного конкурсу.
     path("competitions/<slug:competition_slug>/", views.stories, name="competitions"),
     # Сторінка, що відображає окрему конкурсну роботу.
-    # path('competition/<slug:stories>/<slug:post>/', views.post, name='post'),
     path("competition/<slug:competition_slug>/<slug:post>/", views.post, name="post"),
+    # Сторінка профілю.
+    path("my_account/", views.my_account, name="my_account"),
 ]
