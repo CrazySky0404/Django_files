@@ -23,17 +23,15 @@ class Topic(models.Model):
 
     def get_last_comment(self):
         """Get the latest comment datetime for all subtopics in this topic"""
-        latest_comment_datetime = self.subtopic_set.annotate(  # pylint: disable=no-member
-            last_comment_datetime=Max("comments__date_added")
-        ).aggregate(max_last_comment_datetime=Max("last_comment_datetime"))["max_last_comment_datetime"]
+        latest_comment_datetime = SubtopicComment.objects.filter(subtopic__topic=self).aggregate(
+            max_date_added=Max("date_added")
+        )["max_date_added"]
 
         # Get the latest comment
         if latest_comment_datetime:
-            last_comment = (
-                self.subtopic_set.first()  # pylint: disable=no-member
-                .comments.filter(date_added=latest_comment_datetime)
-                .first()
-            )
+            last_comment = SubtopicComment.objects.filter(
+                date_added=latest_comment_datetime, subtopic__topic=self
+            ).first()
 
             return last_comment
         return None

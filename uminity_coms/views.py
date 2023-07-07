@@ -31,8 +31,8 @@ def topics(request):
     last_comments = {}
     for topic in all_topics:
         last_comment = None
-        for subtopic_from in topic.subtopic_set.all():
-            subtopic_last_comment = subtopic_from.comments.order_by("-date_added").first()
+        for subtopic in topic.subtopic_set.all():  # pylint: disable=redefined-outer-name
+            subtopic_last_comment = subtopic.comments.order_by("-date_added").first()
             if subtopic_last_comment is not None and (
                 last_comment is None or subtopic_last_comment.date_added > last_comment.date_added
             ):
