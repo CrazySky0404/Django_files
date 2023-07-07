@@ -18,7 +18,6 @@ from .models import (
     Books,
 )
 
-
 admin.site.register(Topic)
 admin.site.register(Subtopic)
 admin.site.register(Publication)

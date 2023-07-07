@@ -12,11 +12,21 @@
 
 {% block content %}
 
-<div class="card mb-3">
-    <h6>Детектив / Дитяча література / Художня література / Автобіографії / Історичні</h6>
-    <h5 class="card-header">
-        Список книжок &nbsp;(квадратики - як сторінці з Конкурсами)
-    </h5>
+<div class="container">
+  <div class="row">
+    {% for block in blocks %}
+    <div class="col-lg-4 col-md-6 mb-4">
+      <a href="#">
+      <div class="card color h-100 rounded">
+        <div class="card-body book">
+            <h5 class="card-title-book">{{ block.text }}</h5>
+          <p class="card-text-book">{{ block.description }}</p>
+        </div>
+      </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
 </div>
 
 

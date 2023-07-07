@@ -1,6 +1,7 @@
 """
 This module contains the models for the application.
 """
+from django.db.models import Max
 from django.urls import reverse
 from django.utils import timezone
 
@@ -20,18 +21,22 @@ class Topic(models.Model):
         """Повернути рядкове представлення моделі."""
         return str(self.text)
 
+    def get_last_comment(self):
+        """Get the latest comment datetime for all subtopics in this topic"""
+        latest_comment_datetime = self.subtopic_set.annotate(  # pylint: disable=no-member
+            last_comment_datetime=Max("comments__date_added")
+        ).aggregate(max_last_comment_datetime=Max("last_comment_datetime"))["max_last_comment_datetime"]
 
-class Books(models.Model):
-    """Список книжок."""
+        # Get the latest comment
+        if latest_comment_datetime:
+            last_comment = (
+                self.subtopic_set.first()  # pylint: disable=no-member
+                .comments.filter(date_added=latest_comment_datetime)
+                .first()
+            )
 
-    text = models.CharField(max_length=300)
-    description = models.TextField(null=True)
-    date_added = models.DateTimeField(auto_now_add=True)
-    objects = models.Manager()
-
-    def __str__(self):
-        """Повернути рядкове представлення моделі."""
-        return str(self.text)
+            return last_comment
+        return None
 
 
 class Subtopic(models.Model):
@@ -49,6 +54,19 @@ class Subtopic(models.Model):
 
         verbose_name_plural = "subtopics"
         ordering = ["-date_added"]
+
+    def __str__(self):
+        """Повернути рядкове представлення моделі."""
+        return str(self.text)
+
+
+class Books(models.Model):
+    """Список книжок."""
+
+    text = models.CharField(max_length=300)
+    description = models.TextField(null=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
 
     def __str__(self):
         """Повернути рядкове представлення моделі."""

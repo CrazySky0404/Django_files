@@ -25,42 +25,26 @@ def index(request):
 
 
 def topics(request):
-    """Відображає всі теми."""
+    """Показати всі теми."""
     all_topics = Topic.objects.all()
-    sumen = {}
-    last_entries = {}
-    dict_entry_text = {}
 
-    # for topic in topics:
-    #     subtopics = Subtopic.objects.filter(topic__text=topic).order_by("-id")
-    #     list_entry = []
-    #     list_entry_id_2 = []
-    #     dict_topic_text1 = {topic.id: topic.text}
-
-    # list_y = sorted(list_entry_id_2)
-    # for x in list_y:
-    #     last_entries1 = {topic.id: x}
+    last_comments = {}
+    for topic in all_topics:
+        last_comment = None
+        for subtopic_from in topic.subtopic_set.all():
+            subtopic_last_comment = subtopic_from.comments.order_by("-date_added").first()
+            if subtopic_last_comment is not None and (
+                last_comment is None or subtopic_last_comment.date_added > last_comment.date_added
+            ):
+                last_comment = subtopic_last_comment
+        if last_comment is not None:
+            last_comments[topic.id] = last_comment
 
     context = {
         "topics": all_topics,
-        "sumen": sumen.items(),
-        "last_entries": last_entries.items(),
-        "dict_entry_text": dict_entry_text.items(),
+        "last_comments": last_comments,
     }
     return render(request, "uminity_coms/topics.html", context)
-
-    # for topic in topics:
-    #     subtopics2 = Subtopic.objects.filter(topic__text=topic).order_by('-date_added')
-    #     sum_entries = 0
-    #     for subtopic in subtopics2:
-    #         entries = Entry.objects.filter(subtopic__text=subtopic).order_by('-date_added').count()
-    #         sum_entries += entries
-    #         sumen1 = {topic.id: sum_entries}
-    #     sumen.update(sumen1)
-
-    # context = {'topics': topics, 'sumen': sumen.items(), 'last_entries': last_entries.items(),
-    #            'dict_entry_text': dict_entry_text, 'list_last': list_last}
-    # return render(request, 'uminity_coms/topics.html', context)
 
 
 def subtopics(request, topic_id):
@@ -203,7 +187,7 @@ def books(request):
     all_books = Books.objects.all()
 
     context = {
-        "publications": all_books,
+        "blocks": all_books,
     }
     return render(request, "uminity_coms/books.html", context)
 
