@@ -44,6 +44,7 @@ class Subtopic(models.Model):
     text = models.CharField(max_length=300)
     description = models.TextField(max_length=1500, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
+    comment_count = models.IntegerField(default=0)
 
     class Meta:
         """

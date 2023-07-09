@@ -12,22 +12,21 @@
 
 {% block content %}
 
-<div class="card mb-3">
-    <h5 class="card-header">
-        <a class="btn btn-primary" href="{% url 'uminity_coms:new_subtopic' topic.id %}" role="button">Додати підтему</a>
-    </h5>
-</div>
-
 <div class="container">
   <div class="row" >
     <div class="col-lg-8">
-      <h2>Топіки</h2>
+      <h2>Топіки
+        <a class="btn btn-primary top" href="{% url 'uminity_coms:new_subtopic' topic.id %}" role="button">
+            Додати підтему
+        </a>
+      </h2>
         {% for subtopic in subtopics %}
         <div>
-            <p class="book-radius">
+            <p class="book-radius book-subtopic user">
               <a href="#" class="book-subtopic user">{{ user }}</a>
-              <a href="#" class="book-subtopic user">{{ user.date_joined|date:"d F Y"|lower }}</a><br>
+               {{ user.date_joined|date:"d F Y"|lower }}<br>
               <a href="{% url 'uminity_coms:subtopic' subtopic.id %}" class="book-subtopic theme">{{ subtopic }}</a><br>
+                <span class="book-subtopic comments">({{ subtopic.comment_count }} коментарів)</span><br>
             </p>
         </div>
         {% empty %}
@@ -35,19 +34,15 @@
         {% endfor %}
     </div>
     <div class="col-lg-4">
-      <h2>Коментарі</h2>
-{% for subtopic_time_ago in subtopics_time_ago %}
-    <div>
-        {% for comment_time in subtopic_time_ago.comments_with_time %}
-            <p>{{ comment_time.comment.name }}: {{ comment_time.comment.text }}</p>
-            <p class="text-muted">{{ comment_time.time_ago }}</p>
+      <p class="text-secondary font-weight-bold top-menu-font">Коментарі</p>
+        {% for comment_time in comments_time_ago %}
+        <p class="comment_look">{{ comment_time.comment.name }}: {{ comment_time.comment.text }}</p>
+        <p class="text-muted member-since comments">
+            <a href="#" class="text-muted member-since comments">
+                {{ comment_time.time_ago }}
+            </a>
+        </p>
         {% endfor %}
-    </div>
-{% empty %}
-    <p>Не додано жодної підтеми.</p>
-{% endfor %}
-
-
     </div>
   </div>
 </div>

@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from .models import Topic, Subtopic, Publication, Competition, CompetitionSingle, Books
+from .models import Topic, Subtopic, Publication, Competition, CompetitionSingle, Books, SubtopicComment
 from .forms import (
     TopicForm,
     SubtopicForm,
@@ -52,48 +52,47 @@ def subtopics(request, topic_id):  # pylint: disable=too-many-locals
     topic = Topic.objects.get(id=topic_id)
     subtopics_list = topic.subtopic_set.order_by("-date_added")
 
-    current_datetime = timezone.now()
-    subtopics_with_time = []
-    num_comments = 10
-
     for subtopic in subtopics_list:  # pylint: disable=redefined-outer-name
-        comments = subtopic.get_all_comments(num_comments)
-        subtopic_comments_with_time = []
+        subtopic.comment_count = SubtopicComment.objects.filter(subtopic=subtopic).count()
+        subtopic.save()
 
-        for comment in comments:
-            comment_date_added = comment.date_added
+    current_datetime = timezone.now()
+    comments_with_time = []
 
-            time_difference = current_datetime - comment_date_added
+    comments = SubtopicComment.objects.filter(subtopic__in=subtopics_list).order_by("-date_added")[:10]
 
-            total_seconds = int(time_difference.total_seconds())
-            days, remainder = divmod(total_seconds, 86400)
-            hours, remainder = divmod(remainder, 3600)
-            minutes = remainder // 60
+    for comment in comments:
+        comment_date_added = comment.date_added
 
-            if days > 0:
-                time_ago = f"{days} днів тому"
-            elif hours > 0:
-                time_ago = f"{hours} годин тому"
-            elif minutes > 0:
-                time_ago = f"{minutes} хвилин тому"
-            else:
-                time_ago = "щойно"
+        time_difference = current_datetime - comment_date_added
 
-            subtopic_comments_with_time.append(
-                {
-                    "comment": comment,
-                    "time_ago": time_ago,
-                }
-            )
+        total_seconds = int(time_difference.total_seconds())
+        days, remainder = divmod(total_seconds, 86400)
+        hours, remainder = divmod(remainder, 3600)
+        minutes = remainder // 60
 
-        subtopics_with_time.append(
+        if days > 0:
+            time_ago = f"{days} днів тому"
+        elif hours > 0:
+            time_ago = f"{hours} годин тому"
+        else:
+            time_ago = f"{minutes} хвилин тому"
+
+        comments_with_time.append(
             {
-                "subtopic": subtopic,
-                "comments_with_time": subtopic_comments_with_time,
+                "comment": comment,
+                "time_ago": time_ago,
             }
         )
 
-    page = request.GET.get("page")
+    context = {
+        "topic": topic,
+        "subtopics": subtopics_list,
+        "comments_time_ago": comments_with_time,
+    }
+    return render(request, "uminity_coms/topic.html", context)
+
+    page = request.GET.get("page")  # pylint: disable=unreachable
     results = 3
     paginator = Paginator(subtopics_list, results)
 
@@ -122,7 +121,6 @@ def subtopics(request, topic_id):  # pylint: disable=too-many-locals
     context = {
         "topic": topic,
         "subtopics": subtopics_list,
-        "subtopics_time_ago": subtopics_with_time,
         "paginator": paginator,
         "custom_range": custom_range,
     }

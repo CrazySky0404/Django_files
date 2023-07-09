@@ -1,7 +1,3 @@
-/*.navbar {*/
-/*    background: repeating-radial-gradient(circle, #6254a5, #3474de 80%, #3f356e 100%);*/
-/*}*/
-/*#background: linear-gradient(to right, #413976, #413976 50%, #fbcc56 100%); 79589F - button*/
 
 .gradient-header {
     background: linear-gradient(to right, #413976 10%, #6254a5 50%, #3474de);
@@ -10,6 +6,14 @@
   background-color: #6f62a9;
   color: #ffffff;
   border: none;
+}
+
+.btn.btn-primary.top {
+  background-color: #6f62a9;
+  color: #ffffff;
+  border: none;
+  margin-left: 15px;
+  font-family: BlinkMacSystemFont, sans-serif;
 }
 
 .btn.btn-primary:hover {
@@ -54,13 +58,6 @@ h3 a {
 @font-face {
   font-family: 'Poppins-SemiBold';
   src: url('../fonts/FontsFree-Net-Poppins-SemiBold.ttf') format('truetype');
-  font-weight: 600;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'BlinkMacSystemFont';
-  src: url('../fonts/Blink.otf') format('truetype');
   font-weight: 600;
   font-style: normal;
 }
@@ -207,7 +204,7 @@ h3 a {
 
 /* head - start */
 .logo-font {
-  font-family: BlinkMacSystemFont, sans-serif;
+  font-family: Segoe UI,Roboto,Oxygen,Cantarell,sans-serif;
   margin-top: 5px;
 }
 
@@ -269,17 +266,28 @@ h3 a {
 
 .book-subtopic {
   font-size: 18px;
-  padding: 10px 1px;
+  padding: 1px 1px;
   font-family: Poppins-SemiBol, sans-serif;
 }
 
 .book-subtopic.user {
   font-size: 12px;
   color: #737373;
+  margin-left: 10px;
 }
 
 .book-subtopic.theme {
+  display: inline-block;
   font-size: 18px;
+  margin-left: 10px;
+}
+
+.book-subtopic.comments {
+  font-size: 12px;
+  color: #737373;
+  margin-left: 10px;
+
+  padding-top: 10;
 }
 
 .book-radius:active,
@@ -291,3 +299,29 @@ h3 a {
   color: #333333 !important;
 }
 /* book - end */
+
+/* comments - start */
+.comment_look {
+    font-size: 12px;
+    line-height: 1.4;
+    border: 1px solid #ebe2ce;
+    padding: 5px 2px 5px 7px;
+    margin-bottom: 0;
+    border-radius: 5px;
+    position: relative;
+    font-family: Poppins-SemiBol, sans-serif;
+    background: linear-gradient(to top, #fdf5dc, #faf8ee);
+}
+
+.member-since.comments {
+  font-size: 11px;
+  font-weight: 400;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  font-family: Segoe UI,Roboto,Oxygen,Cantarell,sans-serif;
+  color: #737373;
+  margin-top: 0px;
+  margin-bottom: 12px;
+}
+/* comments - end */
