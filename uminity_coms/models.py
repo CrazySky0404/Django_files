@@ -57,6 +57,11 @@ class Subtopic(models.Model):
         """Повернути рядкове представлення моделі."""
         return str(self.text)
 
+    def get_all_comments(self, num_comments):
+        """Отримати num_comments останніх коментарів для цієї підтеми, відсортованих за датою створення."""
+        comments = SubtopicComment.objects.filter(subtopic=self).order_by("-date_added")[:num_comments]
+        return comments
+
 
 class Books(models.Model):
     """Список книжок."""

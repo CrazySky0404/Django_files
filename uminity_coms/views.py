@@ -1,7 +1,7 @@
 """
 This module contains the views for handling HTTP requests and generating responses.
 """
-
+from django.utils import timezone
 
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
@@ -47,10 +47,51 @@ def topics(request):
     return render(request, "uminity_coms/topics.html", context)
 
 
-def subtopics(request, topic_id):
+def subtopics(request, topic_id):  # pylint: disable=too-many-locals
     """Показати всі підтеми до вибраної теми."""
     topic = Topic.objects.get(id=topic_id)
     subtopics_list = topic.subtopic_set.order_by("-date_added")
+
+    current_datetime = timezone.now()
+    subtopics_with_time = []
+    num_comments = 10
+
+    for subtopic in subtopics_list:  # pylint: disable=redefined-outer-name
+        comments = subtopic.get_all_comments(num_comments)
+        subtopic_comments_with_time = []
+
+        for comment in comments:
+            comment_date_added = comment.date_added
+
+            time_difference = current_datetime - comment_date_added
+
+            total_seconds = int(time_difference.total_seconds())
+            days, remainder = divmod(total_seconds, 86400)
+            hours, remainder = divmod(remainder, 3600)
+            minutes = remainder // 60
+
+            if days > 0:
+                time_ago = f"{days} днів тому"
+            elif hours > 0:
+                time_ago = f"{hours} годин тому"
+            elif minutes > 0:
+                time_ago = f"{minutes} хвилин тому"
+            else:
+                time_ago = "щойно"
+
+            subtopic_comments_with_time.append(
+                {
+                    "comment": comment,
+                    "time_ago": time_ago,
+                }
+            )
+
+        subtopics_with_time.append(
+            {
+                "subtopic": subtopic,
+                "comments_with_time": subtopic_comments_with_time,
+            }
+        )
 
     page = request.GET.get("page")
     results = 3
@@ -81,6 +122,7 @@ def subtopics(request, topic_id):
     context = {
         "topic": topic,
         "subtopics": subtopics_list,
+        "subtopics_time_ago": subtopics_with_time,
         "paginator": paginator,
         "custom_range": custom_range,
     }
@@ -92,6 +134,7 @@ def subtopic(request, subtopic_id):
     """Показати вибрану підтему з усіма записами."""
     all_subtopic = get_object_or_404(Subtopic, id=subtopic_id)
     comments = all_subtopic.comments.all()
+    topic_comments = all_subtopic.comments.all().order_by("-date_added")[:10]
 
     if request.method != "POST":
         form = CommentFormForum()
@@ -100,10 +143,11 @@ def subtopic(request, subtopic_id):
         if form.is_valid():
             new_comment = form.save(commit=False)
             new_comment.subtopic = all_subtopic
+            # new_comment.name = request.user
             new_comment.save()
             return HttpResponseRedirect("/topic/" + f"{subtopic_id}")
 
-    context = {"subtopic": all_subtopic, "comments": comments, "form": form}
+    context = {"subtopic": all_subtopic, "comments": comments, "form": form, "topic_comments": topic_comments}
     return render(request, "uminity_coms/subtopic.html", context)
 
 

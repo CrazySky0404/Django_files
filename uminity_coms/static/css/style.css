@@ -258,4 +258,36 @@ h3 a {
   background-color: #e9ecef;
 }
 
+.card.color:hover,
+.card.color:active {
+  background-color: #cbd0ef;
+}
+
+.book-radius {
+  border-radius: 10px;
+}
+
+.book-subtopic {
+  font-size: 18px;
+  padding: 10px 1px;
+  font-family: Poppins-SemiBol, sans-serif;
+}
+
+.book-subtopic.user {
+  font-size: 12px;
+  color: #737373;
+}
+
+.book-subtopic.theme {
+  font-size: 18px;
+}
+
+.book-radius:active,
+.book-radius:hover,
+.book-radius:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: #e9ecef !important;
+  color: #333333 !important;
+}
 /* book - end */

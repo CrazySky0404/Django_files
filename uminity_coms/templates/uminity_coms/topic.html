@@ -14,22 +14,43 @@
 
 <div class="card mb-3">
     <h5 class="card-header">
-        Тема "{{topic}}" &nbsp;
         <a class="btn btn-primary" href="{% url 'uminity_coms:new_subtopic' topic.id %}" role="button">Додати підтему</a>
     </h5>
 </div>
 
-{% for subtopic in subtopics %}
-<div class="card mb-3">
-    <h4 class="card-header">
-        <a href="{% url 'uminity_coms:subtopic' subtopic.id %}">{{ subtopic }}</a><br>
-    </h4>
-        <div class="card-body">{{ subtopic.description }}
+<div class="container">
+  <div class="row" >
+    <div class="col-lg-8">
+      <h2>Топіки</h2>
+        {% for subtopic in subtopics %}
+        <div>
+            <p class="book-radius">
+              <a href="#" class="book-subtopic user">{{ user }}</a>
+              <a href="#" class="book-subtopic user">{{ user.date_joined|date:"d F Y"|lower }}</a><br>
+              <a href="{% url 'uminity_coms:subtopic' subtopic.id %}" class="book-subtopic theme">{{ subtopic }}</a><br>
+            </p>
         </div>
-</div>
+        {% empty %}
+            <p>Не додано жодної підтеми.</p>
+        {% endfor %}
+    </div>
+    <div class="col-lg-4">
+      <h2>Коментарі</h2>
+{% for subtopic_time_ago in subtopics_time_ago %}
+    <div>
+        {% for comment_time in subtopic_time_ago.comments_with_time %}
+            <p>{{ comment_time.comment.name }}: {{ comment_time.comment.text }}</p>
+            <p class="text-muted">{{ comment_time.time_ago }}</p>
+        {% endfor %}
+    </div>
 {% empty %}
     <p>Не додано жодної підтеми.</p>
 {% endfor %}
+
+
+    </div>
+  </div>
+</div>
 
 {% if subtopics.has_other_pages %}
 <div class="d-flex justify-content-center">

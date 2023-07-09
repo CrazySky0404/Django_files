@@ -60,7 +60,7 @@
 <div class="d-flex justify-content-center">
     <ul class="pagination">
         {% if entries.has_previous %}
-         <li><a href="?page={{entries.previous_page_number}}" class="page-link">&laquo</a></li>
+         <li><a href="?page={{subtopics.previous_page_number}}" class="page-link">&laquo</a></li>
         {% endif %}
 
         {% for page in custom_range %}
@@ -74,7 +74,7 @@
         {% endfor %}
 
         {% if entries.has_next %}
-         <li><a href="?page={{entries.next_page_number}}" class="btn page-link">&raquo</a></li>
+         <li><a href="?page={{subtopics.next_page_number}}" class="btn page-link">&raquo</a></li>
         {% endif %}
     </ul>
 </div>
