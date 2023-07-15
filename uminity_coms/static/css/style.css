@@ -9,11 +9,59 @@
 }
 
 .btn.btn-primary.top {
-  background-color: #6f62a9;
+  background-color: #554b9a;
   color: #ffffff;
   border: none;
   margin-left: 15px;
   font-family: BlinkMacSystemFont, sans-serif;
+}
+
+.btn.btn-primary.top.grey {
+  background-color: #b4bfcb;
+  color: #ffffff;
+  border: none;
+  margin-left: 15px;
+  font-family: BlinkMacSystemFont, sans-serif;
+}
+
+.btn.btn-primary.top.grey:hover {
+  background-color: #8478c4;
+  color: #ffffff;
+  border: none;
+  margin-left: 15px;
+  font-family: BlinkMacSystemFont, sans-serif;
+}
+
+.btn.btn-primary.top:hover {
+  background-color: #413976;
+  color: #ffffff;
+  border: none;
+  margin-left: 15px;
+  font-family: BlinkMacSystemFont, sans-serif;
+}
+
+.btn.btn-primary.try_again {
+  background-color: #8478c4;
+  color: #ffffff;
+  border: none;
+  margin-left: 5px;
+  font-family: BlinkMacSystemFont, sans-serif;
+}
+
+.btn.btn-primary.try_again:hover {
+  background-color: #6254a5;
+}
+
+.btn.btn-primary.chosen {
+  background-color: #5287de;
+  color: #ffffff;
+  border: none;
+  margin-left: 5px;
+  font-family: BlinkMacSystemFont, sans-serif;
+}
+
+.btn.btn-primary.chosen:hover {
+  background-color: #3474de;
 }
 
 .btn.btn-primary:hover {
@@ -73,6 +121,12 @@ h3 a {
   font-family: 'Roboto';
   src: url('../fonts/Roboto-Regular.ttf') format('truetype');
   font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'RobotoBold';
+  src: url('../fonts/Roboto-Bold.ttf') format('truetype');
   font-style: normal;
 }
 
@@ -230,6 +284,21 @@ h3 a {
   margin-top: 10px;
   margin-bottom: 12px;
 }
+
+.topic.title.bold {
+  font-family: RobotoBold, sans-serif;
+  margin-left: 18px;
+  font-weight: 700;
+  line-height: 1.27;
+  font-size: 30px;
+}
+
+.topic.description {
+  font-family: Roboto, sans-serif;
+  margin-left: 18px;
+  line-height: 1.5;
+  font-size: 17px;
+}
 /* topic - end */
 
 /* book - start */
@@ -286,8 +355,7 @@ h3 a {
   font-size: 12px;
   color: #737373;
   margin-left: 10px;
-
-  padding-top: 10;
+  padding-top: 0;
 }
 
 .book-radius:active,
@@ -324,4 +392,26 @@ h3 a {
   margin-top: 0px;
   margin-bottom: 12px;
 }
+.comments.write_block {
+  font-size: 15px;
+  font-family: Poppins-SemiBol, sans-serif;
+  height: 35px;
+  width: 70%;
+  border: 1px solid #ccc;
+  outline: 0;
+  resize: none;
+  padding: 6px 8px 4px;
+}
+
+.comments.write_block::placeholder {
+  color: gray;
+}
+
+.subtopic.comments {
+  font-family: Roboto, sans-serif;
+  margin-left: 0px;
+  line-height: 1.5;
+  font-size: 15px;
+}
+
 /* comments - end */

@@ -1,6 +1,7 @@
 """
 This module contains the views for handling HTTP requests and generating responses.
 """
+from django.db.models import Count
 from django.utils import timezone
 
 from django.http import Http404, HttpResponseRedirect
@@ -8,7 +9,20 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from .models import Topic, Subtopic, Publication, Competition, CompetitionSingle, Books, SubtopicComment
+from .models import (
+    Topic,
+    Subtopic,
+    Publication,
+    Competition,
+    CompetitionSingle,
+    Books,
+    SubtopicComment,
+    View,
+    Like,
+    Dislike,
+    CommentLike,
+)
+
 from .forms import (
     TopicForm,
     SubtopicForm,
@@ -16,6 +30,9 @@ from .forms import (
     NewCommentForm,
     CommentFormForum,
     CommentFormStory,
+    LikeForm,
+    DislikeForm,
+    CommentLikeForm,
 )
 
 
@@ -44,7 +61,7 @@ def topics(request):
         "topics": all_topics,
         "last_comments": last_comments,
     }
-    return render(request, "uminity_coms/topics.html", context)
+    return render(request, "uminity_coms/forum/topics.html", context)
 
 
 def subtopics(request, topic_id):  # pylint: disable=too-many-locals
@@ -90,7 +107,7 @@ def subtopics(request, topic_id):  # pylint: disable=too-many-locals
         "subtopics": subtopics_list,
         "comments_time_ago": comments_with_time,
     }
-    return render(request, "uminity_coms/topic.html", context)
+    return render(request, "uminity_coms/forum/topic.html", context)
 
     page = request.GET.get("page")  # pylint: disable=unreachable
     results = 3
@@ -127,26 +144,88 @@ def subtopics(request, topic_id):  # pylint: disable=too-many-locals
     return render(request, "uminity_coms/topic.html", context)
 
 
-@login_required
 def subtopic(request, subtopic_id):
     """Показати вибрану підтему з усіма записами."""
     all_subtopic = get_object_or_404(Subtopic, id=subtopic_id)
     comments = all_subtopic.comments.all()
     topic_comments = all_subtopic.comments.all().order_by("-date_added")[:10]
+    subtopic = get_object_or_404(Subtopic, id=subtopic_id)
 
-    if request.method != "POST":
-        form = CommentFormForum()
+    subtopic.views += 1
+    subtopic.save()
+
+    likes_count = Like.objects.filter(subtopic=subtopic).count()
+    dislike_count = Dislike.objects.filter(subtopic=subtopic).count()
+    most_liked_comment = SubtopicComment.objects.annotate(like_count=Count('commentlike')).filter(like_count__gte=1).order_by('-like_count').first()
+    user_likes = CommentLike.objects.filter(user=request.user, comment__in=comments).values_list('comment_id',
+                                                                                                 flat=True)
+    form = CommentFormForum()
+    like_form = LikeForm()
+    dislike_form = DislikeForm()
+
+    if request.method == "POST":
+        if 'like_comment_button' in request.POST:
+            comment_id = request.POST.get('comment_id')
+            comment = get_object_or_404(SubtopicComment, id=comment_id)
+            existing_like = CommentLike.objects.filter(user=request.user, comment=comment)
+            if existing_like.exists():
+                existing_like.first().delete()
+            else:
+                CommentLike.objects.create(user=request.user, comment=comment)
+        if 'like_button' in request.POST:
+            existing_like = Like.objects.filter(user=request.user, subtopic=subtopic)
+            existing_dislike = Dislike.objects.filter(user=request.user, subtopic=subtopic)
+            if existing_like.exists():
+                existing_like.first().delete()
+            else:
+                if existing_dislike.exists():
+                    existing_dislike.first().delete()
+                Like.objects.create(user=request.user, subtopic=subtopic)
+        elif 'dislike_button' in request.POST:
+            existing_like = Like.objects.filter(user=request.user, subtopic=subtopic)
+            existing_dislike = Dislike.objects.filter(user=request.user, subtopic=subtopic)
+            if existing_dislike.exists():
+                existing_dislike.first().delete()
+            else:
+                if existing_like.exists():
+                    existing_like.first().delete()
+                Dislike.objects.create(user=request.user, subtopic=subtopic)
+        elif 'comment_button' in request.POST:
+            form = CommentFormForum(request.POST)
+            if form.is_valid():
+                new_comment = form.save(commit=False)
+                new_comment.subtopic = all_subtopic
+                if request.user.is_authenticated:
+                    new_comment.name = request.user.username
+                else:
+                    return redirect('users:login')
+                if 'parent' in request.POST:
+                    try:
+                        parent_id = int(request.POST.get('parent'))
+                        parent_comment = SubtopicComment.objects.get(id=parent_id)
+                        new_comment.parent = parent_comment
+                    except:
+                        pass
+                new_comment.save()
+                #comment_id = new_comment.id
+                #return HttpResponseRedirect(f"/topic/{subtopic_id}#comment-{comment_id}")
+        return HttpResponseRedirect(f"/topic/{subtopic_id}")
     else:
-        form = CommentFormForum(request.POST)
-        if form.is_valid():
-            new_comment = form.save(commit=False)
-            new_comment.subtopic = all_subtopic
-            # new_comment.name = request.user
-            new_comment.save()
-            return HttpResponseRedirect("/topic/" + f"{subtopic_id}")
+        form = CommentFormForum()
 
-    context = {"subtopic": all_subtopic, "comments": comments, "form": form, "topic_comments": topic_comments}
-    return render(request, "uminity_coms/subtopic.html", context)
+    context = {
+        "subtopic": subtopic,
+        "comments": comments,
+        "form": form,
+        "like_form": like_form,
+        "dislike_form": dislike_form,
+        "most_liked_comment": most_liked_comment,
+        "user_likes": user_likes,
+        "topic_comments": topic_comments,
+        "likes_count": likes_count,
+        "dislike_count": dislike_count,
+    }
+    return render(request, "uminity_coms/forum/subtopic.html", context)
 
 
 @login_required
@@ -161,7 +240,7 @@ def new_topic(request):
             return redirect("uminity_coms:topics")
 
     context = {"form": form}
-    return render(request, "uminity_coms/new_topic.html", context)
+    return render(request, "uminity_coms/forum/new_topic.html", context)
 
 
 @login_required
@@ -180,47 +259,7 @@ def new_subtopic(request, topic_id):
             return redirect("uminity_coms:subtopics", topic_id=topic_id)
 
     context = {"topic": topic, "form": form}
-    return render(request, "uminity_coms/new_subtopic.html", context)
-
-
-# @login_required
-# def new_entry(request, subtopic_id):
-#     """Створення нового Допису."""
-#     subtopic = Subtopic.objects.get(id=subtopic_id)
-#     if request.method != 'POST':
-#         form = EntryForm()
-#     else:
-#         form = EntryForm(data=request.POST)
-#         if form.is_valid():
-#             new_entry = form.save(commit=False)
-#             new_entry.subtopic = subtopic
-#             new_entry.owner = request.user
-#             new_entry.save()
-#             return redirect('uminity_coms:subtopic', subtopic_id=subtopic_id)
-#
-#     context = {'subtopic': subtopic, 'form': form}
-#     return render(request, 'uminity_coms/new_entry.html', context)
-
-
-# @login_required
-# def edit_entry(request, entry_id):
-#     """Редагування допису."""
-#     entry = Entry.objects.get(id=entry_id)
-#     subtopic = entry.subtopic
-#
-#     if entry.owner != request.user:
-#         raise Http404
-#
-#     if request.method != 'POST':
-#         form = EntryForm(instance=entry)
-#     else:
-#         form = EntryForm(instance=entry, data=request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('uminity_coms:subtopic', subtopic_id=subtopic.id)
-#
-#     context = {'entry': entry, 'subtopic': subtopic, 'form': form}
-#     return render(request, 'uminity_coms/edit_entry.html', context)
+    return render(request, "uminity_coms/forum/new_subtopic.html", context)
 
 
 @login_required
@@ -231,7 +270,7 @@ def books(request):
     context = {
         "blocks": all_books,
     }
-    return render(request, "uminity_coms/books.html", context)
+    return render(request, "uminity_coms/book/books.html", context)
 
 
 @login_required
@@ -270,7 +309,7 @@ def publications(request):
         "paginator": paginator,
         "custom_range": custom_range,
     }
-    return render(request, "uminity_coms/publications.html", context)
+    return render(request, "uminity_coms/public/publications.html", context)
 
 
 @login_required
@@ -297,7 +336,7 @@ def publication(request, publication_id):
         "form": form,
         "new_comment": new_comment,
     }
-    return render(request, "uminity_coms/publication.html", context)
+    return render(request, "uminity_coms/public/publication.html", context)
 
 
 @login_required
@@ -318,7 +357,7 @@ def new_publication(request):
     count_symbol = len(text)
 
     context = {"form": form, "count_symbol": count_symbol}
-    return render(request, "uminity_coms/new_publication.html", context)
+    return render(request, "uminity_coms/public/new_publication.html", context)
 
 
 @login_required
@@ -338,7 +377,7 @@ def edit_publication(request, publication_id):
             return redirect("uminity_coms:publication", publication_id=all_publication.id)
 
     context = {"publication": all_publication, "form": form}
-    return render(request, "uminity_coms/edit_publication.html", context)
+    return render(request, "uminity_coms/public/edit_publication.html", context)
 
 
 @login_required
@@ -347,7 +386,7 @@ def competitions(request):
     all_competitions = Competition.objects.all()
 
     context = {"competitions": all_competitions}
-    return render(request, "uminity_coms/competitions.html", context)
+    return render(request, "uminity_coms/comps/competitions.html", context)
 
 
 @login_required
@@ -357,7 +396,7 @@ def stories(request, competition_slug):
 
     list_stories = competition.single.order_by("-date_added")
     context = {"list_stories": list_stories, "competition": competition}
-    return render(request, "uminity_coms/list_competitions.html", context)
+    return render(request, "uminity_coms/comps/list_competitions.html", context)
 
 
 @login_required
@@ -388,9 +427,9 @@ def post(request, competition_slug, post):  # pylint: disable=redefined-outer-na
         "form": form,
         "new_comment": new_comment,
     }
-    return render(request, "uminity_coms/post.html", context)
+    return render(request, "uminity_coms/comps/post.html", context)
 
 
 def my_account(request):
     """Відображає профіль користувача."""
-    return render(request, "uminity_coms/my_account.html")
+    return render(request, "uminity_coms/profile/my_account.html")

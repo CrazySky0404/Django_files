@@ -1,0 +1,162 @@
+{% extends "uminity_coms/base.html" %}
+{% load static %}
+
+{% block page_header %}
+<nav aria-label="breadcrumb" >
+  <ol class="breadcrumb card-header">
+    <li class="breadcrumb-item"><a href="{% url 'uminity_coms:index' %}">Головна</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'uminity_coms:topics' %}">Форум</a></li></li>
+    <li class="breadcrumb-item" ><a href="{%url 'uminity_coms:subtopics' subtopic.topic.id %}">{{ subtopic.topic }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ subtopic }}</li>
+  </ol>
+</nav>
+{% endblock page_header %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-lg-10">
+        <p class="book-subtopic user">
+            <a href="#">{{ subtopic.topic }}</a>
+            {{ user.date_joined|date:"d E, H:i" }} @ {{ subtopic.views }} {{ user }}
+        </p>
+        <p class="topic title bold">{{subtopic}}</p>
+        <p class="topic description">{{ subtopic.description }}</p>
+
+        <div style="display: flex;">
+            <form method="POST">
+                {% csrf_token %}
+                {{ like_form }}
+                <button type="submit"  name="like_button" class="btn btn-primary top">{{ likes_count }} - Сподобалося
+                    <img src="{% static 'css/images/smile-icon.png' %}" width='25'>
+                </button>
+            </form>
+            <form method="POST">
+                {% csrf_token %}
+                {{ dislike_form }}
+                <button type="submit" name="dislike_button"  class="btn btn-primary try_again">{{ dislike_count }} - Спробуй ще
+                </button>
+            </form>
+            <form method="POST">
+                <button name="submit" class="btn btn-primary chosen">До обраного
+                </button>
+            </form>
+        </div>
+        <br>
+
+        -----------------------
+        <hr style="margin-left: 18px">
+            <div>
+                <div style="margin-left: 18px">
+                    <form method="post">
+                        <img src="{% static 'css/images/chat-icon.png' %}" height="30" style="margin-right: 5px">
+                        {{ form.text }}
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary top" id="SubmitButtonForm" name="comment_button" style="display:none;">Відправити</button>
+                    </form>
+
+                    {% load mptt_tags %}
+                    <div class="pt-4">
+                        {%  recursetree comments %}
+                        <div id="comment-{{ node.id }}">
+                            <p class="d-flex justify-content-between" style="margin-bottom: 0px">
+                                <a href="#">{{ node.name }}</a> <span class="member-since comments">{{ node.date_added|date:"d.m.Y H:i" }}</span>
+                            </p>
+                            <div class="subtopic comments"> {{ node.text }} </div>
+                            <a href="#" class="btn-reply" data-target="form-{{ node.id }}">Відповісти</a>
+<a href="#" class="like-link" data-form-id="like-form-{{ node.id }}" data-liked="{% if node.id in user_likes %}true{% else %}false{% endif %}">
+    <img class="like-icon" style="height: 18px; padding-left: 5px; margin-bottom: 7px" src="{% static 'css/images/submit_no_like.png' %}" >
+    Підтримати
+</a>
+
+
+                            <div id="form-{{ node.id }}" style="display:none; width: 50%;">
+                                <form method="post">
+                                    {{ form.text }}
+                                    {{ form.name }}
+                                    {% csrf_token %}
+                                    <input type="hidden" id="parent" name="parent" value="{{ node.id }}">
+                                    <button type="submit" class="btn btn-primary top grey submit-button" name="comment_button" >Відповісти</button>
+                                </form>
+                            </div>
+                            <hr/>
+                        </div>
+                        {% if not node.is_leaf_node %}
+                            <div class="children pl-2 pl-md-5">
+                                {{ children }}
+                            </div>
+                        {% endif %}
+                        {% endrecursetree %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+      <div class="col-lg-2">
+      <p class="text-secondary font-weight-bold top-menu-font"></p>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+$('.btn-reply').on('click', function(e) {
+    e.preventDefault();
+    var target = $(this).data('target');
+    $('#' + target).toggle();
+
+    if ($(this).text() == "Відповісти") {
+        $(this).text("Не відповідати");
+    } else {
+        $(this).text("Відповісти");
+    }
+});
+
+$('.submit-button').on('focus', function() {
+    $(this).show();
+}).on('blur', function() {
+    if ($(this).val().length == 0) {
+        $(this).hide();
+    }
+});
+
+$('#SubmitButtonForm').on('input', function() {
+    if ($(this).val().length == 0) {
+        $('.submit-button').hide();
+    } else {
+        $('.submit-button').show();
+    }
+});
+
+$('#commentField').on('focus', function() {
+$('#SubmitButtonForm').show();
+}).on('blur', function() {
+if ($(this).val().length == 0) {
+  $('#SubmitButtonForm').hide();
+}
+});
+
+$('.like-link').on('click', function(e) {
+    e.preventDefault();
+    var formId = $(this).data('form-id');
+    var likeIcon = $(this).find('.like-icon');
+    var likedIconSrc = "{% static 'css/images/submit_like.png' %}";
+    var unlikedIconSrc = "{% static 'css/images/submit_no_like.png' %}";
+    var commentId = $(this).data('comment-id');
+
+    if (likeIcon.attr('src') === unlikedIconSrc) {
+        likeIcon.attr('src', likedIconSrc).css('height', '18px');
+    } else {
+        likeIcon.attr('src', unlikedIconSrc).css('height', '18px');
+    }
+    $('#' + formId).submit();
+});
+
+});
+</script>
+
+
+{% endblock content %}

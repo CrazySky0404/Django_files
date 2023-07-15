@@ -1,4 +1,5 @@
 {% extends "uminity_coms/base.html" %}
+{% load custom_filters %}
 
 {% block page_header %}
 <nav aria-label="breadcrumb" >
@@ -15,7 +16,7 @@
 <div class="container">
   <div class="row" >
     <div class="col-lg-8">
-      <h2>Топіки
+      <h2 style="margin-left: 18px;">Топіки
         <a class="btn btn-primary top" href="{% url 'uminity_coms:new_subtopic' topic.id %}" role="button">
             Додати підтему
         </a>
@@ -26,7 +27,7 @@
               <a href="#" class="book-subtopic user">{{ user }}</a>
                {{ user.date_joined|date:"d F Y"|lower }}<br>
               <a href="{% url 'uminity_coms:subtopic' subtopic.id %}" class="book-subtopic theme">{{ subtopic }}</a><br>
-                <span class="book-subtopic comments">({{ subtopic.comment_count }} коментарів)</span><br>
+                <span class="book-subtopic comments">({{ subtopic.comment_count }} коментар{{ subtopic.comment_count|pluralize_ukr }})</span><br>
             </p>
         </div>
         {% empty %}
@@ -38,9 +39,10 @@
         {% for comment_time in comments_time_ago %}
         <p class="comment_look">{{ comment_time.comment.name }}: {{ comment_time.comment.text }}</p>
         <p class="text-muted member-since comments">
-            <a href="#" class="text-muted member-since comments">
-                {{ comment_time.time_ago }}
-            </a>
+        <a href="{% url 'uminity_coms:subtopic' comment_time.comment.subtopic.id %}#comment-{{ comment_time.comment.id }}" class="text-muted member-since comments">
+            {{ comment_time.time_ago }}
+        </a>
+
         </p>
         {% endfor %}
     </div>

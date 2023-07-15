@@ -40,13 +40,15 @@
     </div>
 
     <div class="col text-center account-font">
-      {% with last_comment=topic.get_last_comment %}
-        {% if last_comment %}
-          {{ last_comment.text }}
-        {% else %}
-          No comments yet.
-        {% endif %}
-      {% endwith %}
+        {% with last_comment=topic.get_last_comment %}
+          {% if last_comment.comment %}
+            <a href="{% url 'uminity_coms:subtopic' last_comment.subtopic.id %}#comment-{{ last_comment.comment.id }}">
+              {{ last_comment.comment.text }}
+            </a>
+          {% else %}
+            No comments yet.
+          {% endif %}
+        {% endwith %}
     </div>
 
     <div class="col text-center d-none d-sm-block account-font">

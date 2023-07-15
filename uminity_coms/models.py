@@ -1,7 +1,9 @@
 """
 This module contains the models for the application.
 """
+from django.contrib.auth.models import User
 from django.db.models import Max
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 
@@ -33,9 +35,8 @@ class Topic(models.Model):
                 date_added=latest_comment_datetime, subtopic__topic=self
             ).first()
 
-            return last_comment
-        return None
-
+            return {"comment": last_comment, "subtopic": last_comment.subtopic}
+        return {"comment": None, "subtopic": None}
 
 class Subtopic(models.Model):
     """Підтема до теми, яку вивчає користувач."""
@@ -45,6 +46,7 @@ class Subtopic(models.Model):
     description = models.TextField(max_length=1500, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
     comment_count = models.IntegerField(default=0)
+    views = models.IntegerField(default=0)
 
     class Meta:
         """
@@ -215,3 +217,34 @@ class CompetitionComment(MPTTModel):
     def __str__(self):
         """Повернути рядкове представлення моделі."""
         return str(self.name)
+
+class View(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    subtopic = models.ForeignKey(Subtopic, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("user", "subtopic")
+
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    subtopic = models.ForeignKey(Subtopic, on_delete=models.CASCADE)
+    objects = models.Manager()
+
+    class Meta:
+        unique_together = ("user", "subtopic")
+
+class Dislike(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    subtopic = models.ForeignKey(Subtopic, on_delete=models.CASCADE)
+    objects = models.Manager()
+
+    class Meta:
+        unique_together = ("user", "subtopic")
+
+class CommentLike(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.ForeignKey(SubtopicComment, on_delete=models.CASCADE)
+    objects = models.Manager()
+
+    class Meta:
+        unique_together = ("user", "comment")

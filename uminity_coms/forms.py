@@ -13,7 +13,7 @@ from .models import (
     Publication,
     PublicationComment,
     CompetitionComment,
-    SubtopicComment,
+    SubtopicComment, CommentLike,
 )
 
 
@@ -114,6 +114,12 @@ class CommentFormForum(forms.ModelForm):
         self.fields["parent"].widget.attrs.update({"class": "d-none"})
         self.fields["parent"].label = ""
         self.fields["parent"].required = False
+        self.fields['name'].required = False
+        self.fields['text'].widget = forms.TextInput(attrs={
+            'class': 'comments write_block',
+            'placeholder': 'Додати коментар',
+            'id': 'commentField',
+        })
 
     class Meta:
         """
@@ -123,7 +129,7 @@ class CommentFormForum(forms.ModelForm):
         model = SubtopicComment
         fields = ("name", "parent", "text")
         widgets = {
-            "name": forms.TextInput(attrs={"class": "col-sm-12"}),
+            "name": forms.TextInput(attrs={'class': 'd-none'}),
             "text": forms.Textarea(attrs={"class": "form-control"}),
         }
 
@@ -156,3 +162,12 @@ class CommentFormStory(forms.ModelForm):
             "name": forms.TextInput(attrs={"class": "col-sm-12"}),
             "text": forms.Textarea(attrs={"class": "form-control"}),
         }
+
+class LikeForm(forms.Form):
+    pass
+
+class DislikeForm(forms.Form):
+    pass
+
+class CommentLikeForm(forms.ModelForm):
+    comment_id = forms.IntegerField(widget=forms.HiddenInput())
